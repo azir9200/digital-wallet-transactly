@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Wallet, ArrowRight, User } from "lucide-react";
-import logo from "@/assets/Logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +63,7 @@ const Navbar = () => {
               </Button>
             </Link>
             <Link to="/register">
-              <Button variant="hero" size="sm">
+              <Button variant="link" size="sm">
                 Get Started
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -112,7 +111,7 @@ const Navbar = () => {
                   </Button>
                 </Link>
                 <Link to="/register" onClick={() => setIsOpen(false)}>
-                  <Button variant="hero" className="w-full">
+                  <Button variant="link" className="w-full">
                     Get Started
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
