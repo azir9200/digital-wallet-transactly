@@ -37,6 +37,7 @@ export const router = createBrowserRouter([
         Component: About,
         path: "about",
       },
+
       {
         Component: Login,
         path: "login",

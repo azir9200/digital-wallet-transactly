@@ -42,18 +42,26 @@ export function RegisterForm({
   const [register] = useRegisterMutation();
   const navigate = useNavigate();
 
+  // const form = useForm<z.infer<typeof registerSchema>>({
+  //   resolver: zodResolver(registerSchema),
+  //   defaultValues: {
+  //     name: "",
+  //     email: "",
+  //     password: "",
+  //     confirmPassword: "",
+  //   },
+  // });
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      password: "123456",
+      confirmPassword: "123456",
     },
   });
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-    alert("Form submitted!");
     console.log("Form data", data);
     const userInfo = {
       name: data.name,
@@ -63,11 +71,12 @@ export function RegisterForm({
     console.log("userInfo", userInfo);
     try {
       const result = await register(userInfo).unwrap();
-      console.log("regiter", result);
       toast.success("User created successfully");
+      console.log("object result", result);
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      toast.error(error?.data?.message || "Registration failed");
     }
   };
 

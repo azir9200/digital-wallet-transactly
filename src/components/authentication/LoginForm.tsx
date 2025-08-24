@@ -11,29 +11,27 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import { toast } from "sonner";
+import { Link, useLocation, useNavigate } from "react-router";
 
 export function LoginForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirect = location.state?.from?.pathname || "/dashboard";
   const form = useForm();
-  //   const [login] = useLoginMutation();
+  const [login] = useLoginMutation();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log("data login", data);
-    // try {
-    //   const res = await login(data).unwrap();
-    //   console.log(res);
-    // } catch (err) {
-    //   console.error(err);
-
-    //   if (err.status === 401) {
-    //     toast.error("Your account is not verified");
-    //     navigate("/verify", { state: data.email });
-    //   }
-    // }
+    try {
+      const res = await login(data).unwrap();
+      console.log(res);
+      navigate(redirect, { replace: true });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
