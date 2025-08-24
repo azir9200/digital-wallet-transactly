@@ -1,21 +1,28 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Shield, Zap, Globe, CheckCircle } from "lucide-react";
+import {
+  ArrowRight,
+  Play,
+  Shield,
+  Zap,
+  Globe,
+  CheckCircle,
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-wallet.jpg";
+import heroImage from "@/assets/assets/hero-wallet.jpg";
 
 const HeroSection = () => {
   const trustFeatures = [
     "Bank-level security",
     "Licensed & regulated",
     "24/7 customer support",
-    "Instant transfers"
+    "Instant transfers",
   ];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-hero" />
-      
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-400 to-blue-300" />
+
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-20 h-20 bg-white rounded-full animate-pulse-slow" />
@@ -30,7 +37,9 @@ const HeroSection = () => {
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
               <Shield className="w-4 h-4 text-white mr-2" />
-              <span className="text-white text-sm font-medium">Trusted by 5M+ users worldwide</span>
+              <span className="text-white text-sm font-medium">
+                Trusted by 5M+ users worldwide
+              </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
@@ -42,8 +51,9 @@ const HeroSection = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-white/90 mb-8 max-w-xl">
-              The fastest, most secure way to send money internationally. 
-              Low fees, great exchange rates, and instant transfers to 180+ countries.
+              The fastest, most secure way to send money internationally. Low
+              fees, great exchange rates, and instant transfers to 180+
+              countries.
             </p>
 
             {/* Trust Features */}
@@ -51,7 +61,9 @@ const HeroSection = () => {
               {trustFeatures.map((feature, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <CheckCircle className="w-5 h-5 text-success-light" />
-                  <span className="text-white/90 text-sm font-medium">{feature}</span>
+                  <span className="text-white/90 text-sm font-medium">
+                    {feature}
+                  </span>
                 </div>
               ))}
             </div>
@@ -59,12 +71,16 @@ const HeroSection = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Link to="/register">
-                <Button variant="cta" size="xl" className="w-full sm:w-auto">
+                <Button variant="link" size="lg" className="w-full sm:w-auto">
                   Start Sending Money
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Button variant="glass" size="xl" className="w-full sm:w-auto">
+              <Button
+                variant="destructive"
+                size="lg"
+                className="w-full sm:w-auto"
+              >
                 <Play className="w-5 h-5 mr-2" />
                 Watch Demo
               </Button>
@@ -90,9 +106,9 @@ const HeroSection = () => {
           {/* Right Content - Hero Image */}
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl hover-lift">
-              <img 
-                src={heroImage} 
-                alt="Digital wallet money transfer" 
+              <img
+                src={heroImage}
+                alt="Digital wallet money transfer"
                 className="w-full h-auto"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
