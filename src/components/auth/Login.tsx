@@ -1,19 +1,27 @@
-import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Wallet, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Wallet, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "../hooks/use-toast";
+// import { useAuth } from '@/contexts/AuthContext';
+// import { toast } from '@/hooks/use-toast';
 
 const loginSchema = z.object({
-  email: z.string().email('Please enter a valid email'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(1, "Password is required"),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -25,7 +33,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname || "/dashboard";
 
   const {
     register,
@@ -40,15 +48,15 @@ const Login = () => {
     try {
       await login(data.email, data.password);
       toast({
-        title: 'Success!',
-        description: 'Welcome back to RemitSwift',
+        title: "Success!",
+        description: "Welcome back to RemitSwift",
       });
       navigate(from, { replace: true });
     } catch (error) {
       toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Login failed',
-        variant: 'destructive',
+        title: "Error",
+        description: error instanceof Error ? error.message : "Login failed",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -63,9 +71,7 @@ const Login = () => {
             <Wallet className="h-8 w-8 text-white" />
           </div>
           <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-          <CardDescription>
-            Sign in to your RemitSwift account
-          </CardDescription>
+          <CardDescription>Sign in to your RemitSwift account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -75,11 +81,13 @@ const Login = () => {
                 id="email"
                 type="email"
                 placeholder="Enter your email"
-                {...register('email')}
-                className={errors.email ? 'border-destructive' : ''}
+                {...register("email")}
+                className={errors.email ? "border-destructive" : ""}
               />
               {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -88,10 +96,10 @@ const Login = () => {
               <div className="relative">
                 <Input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  {...register('password')}
-                  className={errors.password ? 'border-destructive' : ''}
+                  {...register("password")}
+                  className={errors.password ? "border-destructive" : ""}
                 />
                 <Button
                   type="button"
@@ -108,7 +116,9 @@ const Login = () => {
                 </Button>
               </div>
               {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -119,15 +129,18 @@ const Login = () => {
                   Signing in...
                 </>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-primary hover:underline font-medium">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign up
               </Link>
             </p>
@@ -136,10 +149,18 @@ const Login = () => {
           <div className="mt-4 p-4 bg-muted/50 rounded-lg">
             <p className="text-sm font-medium mb-2">Demo Accounts:</p>
             <div className="space-y-1 text-xs text-muted-foreground">
-              <p><strong>User:</strong> user@example.com</p>
-              <p><strong>Agent:</strong> agent@example.com</p>
-              <p><strong>Admin:</strong> admin@example.com</p>
-              <p><strong>Password:</strong> password123</p>
+              <p>
+                <strong>User:</strong> user@example.com
+              </p>
+              <p>
+                <strong>Agent:</strong> agent@example.com
+              </p>
+              <p>
+                <strong>Admin:</strong> admin@example.com
+              </p>
+              <p>
+                <strong>Password:</strong> password123
+              </p>
             </div>
           </div>
         </CardContent>

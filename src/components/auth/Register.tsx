@@ -1,28 +1,37 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Wallet, Eye, EyeOff, Loader2, User, Users } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useAuth, UserRole } from '@/contexts/AuthContext';
-import { toast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Wallet, Eye, EyeOff, Loader2, User, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
+// import { toast } from '@/hooks/use-toast';
 
-const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email'),
-  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string(),
-  role: z.enum(['user', 'agent'] as const),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email"),
+    phone: z.string().min(10, "Phone number must be at least 10 digits"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+    role: z.enum(["user", "agent"] as const),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterForm = z.infer<typeof registerSchema>;
 
@@ -41,11 +50,11 @@ const Register = () => {
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      role: 'user',
+      role: "user",
     },
   });
 
-  const selectedRole = watch('role');
+  const selectedRole = watch("role");
 
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
@@ -57,17 +66,10 @@ const Register = () => {
         password: data.password,
         role: data.role,
       });
-      toast({
-        title: 'Success!',
-        description: 'Account created successfully. Welcome to RemitSwift!',
-      });
-      navigate('/dashboard');
+      toast.success("User created successfully");
+      navigate("/dashboard");
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Registration failed',
-        variant: 'destructive',
-      });
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -92,11 +94,13 @@ const Register = () => {
               <Input
                 id="name"
                 placeholder="Enter your full name"
-                {...register('name')}
-                className={errors.name ? 'border-destructive' : ''}
+                {...register("name")}
+                className={errors.name ? "border-destructive" : ""}
               />
               {errors.name && (
-                <p className="text-sm text-destructive">{errors.name.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
@@ -106,11 +110,13 @@ const Register = () => {
                 id="email"
                 type="email"
                 placeholder="Enter your email"
-                {...register('email')}
-                className={errors.email ? 'border-destructive' : ''}
+                {...register("email")}
+                className={errors.email ? "border-destructive" : ""}
               />
               {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -119,11 +125,13 @@ const Register = () => {
               <Input
                 id="phone"
                 placeholder="Enter your phone number"
-                {...register('phone')}
-                className={errors.phone ? 'border-destructive' : ''}
+                {...register("phone")}
+                className={errors.phone ? "border-destructive" : ""}
               />
               {errors.phone && (
-                <p className="text-sm text-destructive">{errors.phone.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.phone.message}
+                </p>
               )}
             </div>
 
@@ -131,21 +139,28 @@ const Register = () => {
               <Label>Account Type</Label>
               <RadioGroup
                 value={selectedRole}
-                onValueChange={(value) => register('role').onChange({ target: { value } })}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                onValueChange={(value: any) =>
+                  register("role").onChange({ target: { value } })
+                }
                 className="grid grid-cols-2 gap-4"
               >
                 <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-muted/50 transition-colors">
                   <RadioGroupItem value="user" id="user" />
                   <div className="flex items-center space-x-2">
                     <User className="h-4 w-4 text-primary" />
-                    <Label htmlFor="user" className="cursor-pointer">User</Label>
+                    <Label htmlFor="user" className="cursor-pointer">
+                      User
+                    </Label>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-muted/50 transition-colors">
                   <RadioGroupItem value="agent" id="agent" />
                   <div className="flex items-center space-x-2">
                     <Users className="h-4 w-4 text-primary" />
-                    <Label htmlFor="agent" className="cursor-pointer">Agent</Label>
+                    <Label htmlFor="agent" className="cursor-pointer">
+                      Agent
+                    </Label>
                   </div>
                 </div>
               </RadioGroup>
@@ -156,10 +171,10 @@ const Register = () => {
               <div className="relative">
                 <Input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
-                  {...register('password')}
-                  className={errors.password ? 'border-destructive' : ''}
+                  {...register("password")}
+                  className={errors.password ? "border-destructive" : ""}
                 />
                 <Button
                   type="button"
@@ -176,7 +191,9 @@ const Register = () => {
                 </Button>
               </div>
               {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -185,10 +202,10 @@ const Register = () => {
               <div className="relative">
                 <Input
                   id="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
-                  {...register('confirmPassword')}
-                  className={errors.confirmPassword ? 'border-destructive' : ''}
+                  {...register("confirmPassword")}
+                  className={errors.confirmPassword ? "border-destructive" : ""}
                 />
                 <Button
                   type="button"
@@ -205,7 +222,9 @@ const Register = () => {
                 </Button>
               </div>
               {errors.confirmPassword && (
-                <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.confirmPassword.message}
+                </p>
               )}
             </div>
 
@@ -216,15 +235,18 @@ const Register = () => {
                   Creating account...
                 </>
               ) : (
-                'Create Account'
+                "Create Account"
               )}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{' '}
-              <Link to="/login" className="text-primary hover:underline font-medium">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign in
               </Link>
             </p>
