@@ -3,7 +3,6 @@ import {
   UserCheck, 
   ArrowUpDown, 
   DollarSign,
-  TrendingUp,
   AlertCircle,
   Activity,
   Shield

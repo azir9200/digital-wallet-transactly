@@ -1,24 +1,25 @@
-import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  Wallet, 
-  Menu, 
-  X, 
-  Home, 
-  CreditCard, 
-  ArrowUpDown, 
-  History, 
-  User, 
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Wallet,
+  Menu,
+  X,
+  Home,
+  CreditCard,
+  ArrowUpDown,
+  History,
+  User,
   LogOut,
   Users,
   BarChart3,
   Settings,
   UserCheck,
-  Shield
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useAuth } from '@/contexts/AuthContext';
+  Shield,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 // import { toast } from '@/hooks/use-toast';
 
 interface DashboardLayoutProps {
@@ -33,43 +34,60 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const handleLogout = () => {
     logout();
-    toast({
-      title: 'Logged out',
-      description: 'You have been successfully logged out.',
-    });
-    navigate('/');
+    toast.success("You have logged out successfully");
+    navigate("/");
   };
 
   const getNavItems = () => {
     const baseItems = [
-      { name: 'Dashboard', href: '/dashboard', icon: Home },
-      { name: 'Profile', href: '/dashboard/profile', icon: User },
+      { name: "Dashboard", href: "/dashboard", icon: Home },
+      { name: "Profile", href: "/dashboard/profile", icon: User },
     ];
 
     switch (user?.role) {
-      case 'user':
+      case "user":
         return [
           ...baseItems.slice(0, 1),
-          { name: 'Transactions', href: '/dashboard/transactions', icon: History },
-          { name: 'Send Money', href: '/dashboard/send', icon: ArrowUpDown },
-          { name: 'Deposit', href: '/dashboard/deposit', icon: CreditCard },
+          {
+            name: "Transactions",
+            href: "/dashboard/transactions",
+            icon: History,
+          },
+          { name: "Send Money", href: "/dashboard/send", icon: ArrowUpDown },
+          { name: "Deposit", href: "/dashboard/deposit", icon: CreditCard },
           baseItems[1], // Profile
         ];
-      case 'agent':
+      case "agent":
         return [
           ...baseItems.slice(0, 1),
-          { name: 'Cash In/Out', href: '/dashboard/cash-operations', icon: CreditCard },
-          { name: 'Transactions', href: '/dashboard/transactions', icon: History },
-          { name: 'Commission', href: '/dashboard/commission', icon: BarChart3 },
+          {
+            name: "Cash In/Out",
+            href: "/dashboard/cash-operations",
+            icon: CreditCard,
+          },
+          {
+            name: "Transactions",
+            href: "/dashboard/transactions",
+            icon: History,
+          },
+          {
+            name: "Commission",
+            href: "/dashboard/commission",
+            icon: BarChart3,
+          },
           baseItems[1], // Profile
         ];
-      case 'admin':
+      case "admin":
         return [
           ...baseItems.slice(0, 1),
-          { name: 'Users', href: '/dashboard/users', icon: Users },
-          { name: 'Agents', href: '/dashboard/agents', icon: UserCheck },
-          { name: 'Transactions', href: '/dashboard/transactions', icon: History },
-          { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+          { name: "Users", href: "/dashboard/users", icon: Users },
+          { name: "Agents", href: "/dashboard/agents", icon: UserCheck },
+          {
+            name: "Transactions",
+            href: "/dashboard/transactions",
+            icon: History,
+          },
+          { name: "Settings", href: "/dashboard/settings", icon: Settings },
           baseItems[1], // Profile
         ];
       default:
@@ -82,9 +100,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const getRoleIcon = () => {
     switch (user?.role) {
-      case 'admin':
+      case "admin":
         return <Shield className="h-4 w-4" />;
-      case 'agent':
+      case "agent":
         return <UserCheck className="h-4 w-4" />;
       default:
         return <User className="h-4 w-4" />;
@@ -93,12 +111,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const getRoleColor = () => {
     switch (user?.role) {
-      case 'admin':
-        return 'text-red-500';
-      case 'agent':
-        return 'text-blue-500';
+      case "admin":
+        return "text-red-500";
+      case "agent":
+        return "text-blue-500";
       default:
-        return 'text-primary';
+        return "text-primary";
     }
   };
 
@@ -106,17 +124,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-background">
       {/* Mobile sidebar overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 lg:hidden z-40"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`
+      <aside
+        className={`
         fixed top-0 left-0 z-50 h-full w-64 bg-card border-r border-border transform transition-transform lg:translate-x-0
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+      >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-border">
@@ -141,9 +161,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                     to={item.href}
                     className={`
                       flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                      ${isActive(item.href) 
-                        ? 'bg-primary/10 text-primary' 
-                        : 'text-muted-foreground hover:text-primary hover:bg-muted'
+                      ${
+                        isActive(item.href)
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:text-primary hover:bg-muted"
                       }
                     `}
                     onClick={() => setIsSidebarOpen(false)}
@@ -166,7 +187,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               </Avatar>
               <div className="flex-1">
                 <p className="text-sm font-medium">{user?.name}</p>
-                <div className={`flex items-center space-x-1 text-xs ${getRoleColor()}`}>
+                <div
+                  className={`flex items-center space-x-1 text-xs ${getRoleColor()}`}
+                >
                   {getRoleIcon()}
                   <span className="capitalize">{user?.role}</span>
                 </div>
@@ -203,15 +226,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               size="icon"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             >
-              {isSidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isSidebarOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </Button>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="p-6">
-          {children}
-        </main>
+        <main className="p-6">{children}</main>
       </div>
     </div>
   );
