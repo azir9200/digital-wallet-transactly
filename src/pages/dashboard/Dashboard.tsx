@@ -1,18 +1,18 @@
-import { useAuth } from '@/contexts/AuthContext';
-import UserDashboard from './UserDashboard';
-import AgentDashboard from './AgentDashboard';
-import AdminDashboard from './AdminDashboard';
+import UserDashboard from "./UserDashboard";
+import AgentDashboard from "./AgentDashboard";
+import AdminDashboard from "./AdminDashboard";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { data: user } = useUserInfoQuery(undefined);
 
   const renderDashboard = () => {
     switch (user?.role) {
-      case 'user':
+      case "user":
         return <UserDashboard />;
-      case 'agent':
+      case "agent":
         return <AgentDashboard />;
-      case 'admin':
+      case "admin":
         return <AdminDashboard />;
       default:
         return <div>Invalid user role</div>;

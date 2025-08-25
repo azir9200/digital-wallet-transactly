@@ -1,6 +1,4 @@
-
-import type { ISidebarItem } from "@/lib/types";
-
+import type { ISidebarItem } from "@/types/authTypes";
 
 export const generateRoutes = (sidebarItems: ISidebarItem[]) => {
   return sidebarItems.flatMap((section) =>

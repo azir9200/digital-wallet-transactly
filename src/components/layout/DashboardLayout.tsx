@@ -18,9 +18,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-// import { toast } from '@/hooks/use-toast';
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -28,12 +27,14 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth();
+  const { data: user } = useUserInfoQuery(undefined);
+
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    // logout();
     toast.success("You have logged out successfully");
     navigate("/");
   };

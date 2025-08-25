@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
+import { setCredentials } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hook";
 
 export function LoginForm({
   className,
@@ -19,16 +21,21 @@ export function LoginForm({
 }: React.HTMLAttributes<HTMLDivElement>) {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const redirect = location.state?.from?.pathname || "/dashboard";
+  console.log("redirect", redirect);
   const form = useForm();
   const [login] = useLoginMutation();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log("data login", data);
     try {
       const res = await login(data).unwrap();
-      console.log(res);
+
+      dispatch(setCredentials({ token: res.data.accessToken, user: null }));
       navigate(redirect, { replace: true });
+
+      console.log(res);
     } catch (err) {
       console.error(err);
     }

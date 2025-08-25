@@ -1,25 +1,26 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth, type UserRole,  } from '@/contexts/AuthContext';
+import { Navigate } from "react-router-dom";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import type { ReactNode } from "react";
+import type { TRole } from "@/types/authTypes";
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
-  allowedRoles?: UserRole[];
+  children: ReactNode;
+  requiredRole?: TRole;
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  allowedRoles 
-}) => {
-  const { isAuthenticated, user } = useAuth();
-  const location = useLocation();
+export function ProtectedRoute({
+  children,
+  requiredRole,
+}: ProtectedRouteProps) {
+  const { data, isLoading } = useUserInfoQuery(undefined);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  if (!isLoading && !data?.data?.email) {
+    return <Navigate to="/login" />;
   }
 
-  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
+  if (requiredRole && !isLoading && requiredRole !== data?.data?.role) {
+    return <Navigate to="/unauthorized" />;
   }
 
   return <>{children}</>;
-};
+}

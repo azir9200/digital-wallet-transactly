@@ -1,5 +1,7 @@
 import type { ComponentType } from "react";
 
+ export type TRole = "SUPER_ADMIN" | "ADMIN" | "AGENT" | "USER";
+
 export interface ILogin {
   email: string;
   password: string;
@@ -21,7 +23,7 @@ export interface ISidebarItem {
   }[];
 }
 
-export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";
+
 type ZodIssue = {
   code: string;
   expected: string;

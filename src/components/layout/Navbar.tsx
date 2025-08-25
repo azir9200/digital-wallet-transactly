@@ -2,10 +2,26 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Wallet, ArrowRight, User } from "lucide-react";
+import {
+  authApi,
+  useLogoutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hook";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+  const { data } = useUserInfoQuery(undefined);
+  console.log("navbar data", data);
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = async () => {
+    await logout(undefined);
+    dispatch(authApi.util.resetApiState());
+  };
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -29,11 +45,9 @@ const Navbar = () => {
           </div>
           <Link to="/" className="flex items-center space-x-2 group">
             <div className="bg-gradient-primary p-2 rounded-lg group-hover:scale-110 transition-smooth">
-              <Wallet className="h-6 w-6 text-white" />
+              <Wallet className="h-6 w-6 text-violet-700" />
             </div>
-            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              RemitSwift
-            </span>
+            <span className="text-xl font-bold">RemitSwift</span>
           </Link>
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
