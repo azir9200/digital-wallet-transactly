@@ -1,26 +1,27 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Wallet, ArrowRight, User } from "lucide-react";
-import {
-  authApi,
-  useLogoutMutation,
-  useUserInfoQuery,
-} from "@/redux/features/auth/auth.api";
+import { Menu, X, ArrowRight, User } from "lucide-react";
+import { useUserInfoQuery } from "@/redux/api/auth.api";
 import { useAppDispatch } from "@/redux/hook";
+import { logout } from "@/redux/features/auth/authSlice";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
-  const { data } = useUserInfoQuery(undefined);
-  console.log("navbar data", data);
-  const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
+  const { data, isLoading } = useUserInfoQuery(undefined);
+  const user = data?.data;
+  console.log("navbar user", user);
+  console.log("navbar ", data);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  // const { token } = useSelector((state: RootState) => state.auth);
+  // console.log("tok navbar", token);
 
-  const handleLogout = async () => {
-    await logout(undefined);
-    dispatch(authApi.util.resetApiState());
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const navLinks = [
@@ -29,6 +30,7 @@ const Navbar = () => {
     { name: "Features", href: "/features" },
     { name: "Contact", href: "/contact" },
     { name: "FAQ", href: "/faq" },
+    { name: "Dashboard", href: "/dashboard" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -37,17 +39,12 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full bg-blue-50 backdrop-blur-md border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div>
+          <div></div>
+          <Link to="/" className="flex items-center space-x-2 group">
             <img
               src="https://i.ibb.co/g5VqtLk/Transactly-Financial-Services-Logo.png"
               alt="logo"
             />
-          </div>
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="bg-gradient-primary p-2 rounded-lg group-hover:scale-110 transition-smooth">
-              <Wallet className="h-6 w-6 text-violet-700" />
-            </div>
-            <span className="text-xl font-bold">RemitSwift</span>
           </Link>
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -70,18 +67,42 @@ const Navbar = () => {
           </div>
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login">
-              <Button variant="ghost" size="sm" className="text-primary">
-                <User className="w-4 h-4 mr-2" />
-                Sign In
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button variant="link" size="sm">
-                Get Started
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+            {user ? (
+              <div className="hidden md:flex items-center space-x-4">
+                <Link to="/login">
+                  <Button
+                    onClick={handleLogout}
+                    variant="ghost"
+                    size="sm"
+                    className="text-primary"
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Logout
+                  </Button>
+                </Link>
+                <Link to="/dashboard">
+                  <Button variant="link" size="sm">
+                    Dashboard
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center space-x-4">
+                <Link to="/login">
+                  <Button variant="ghost" size="sm" className="text-primary">
+                    <User className="w-4 h-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button variant="link" size="sm">
+                    Get Started
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -117,11 +138,22 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
+
+              {user ? (
+                <div>
+                  <p>Logout</p>
+                </div>
+              ) : (
+                <div>
+                  {" "}
+                  <p>login</p>{" "}
+                </div>
+              )}
               <div className="flex flex-col space-y-2 pt-4 border-t border-border/20">
                 <Link to="/login" onClick={() => setIsOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">
                     <User className="w-4 h-4 mr-2" />
-                    Sign In
+                    Sign In in
                   </Button>
                 </Link>
                 <Link to="/register" onClick={() => setIsOpen(false)}>

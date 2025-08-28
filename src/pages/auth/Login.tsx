@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import Logo from "@/assets/logo.png";
 import { LoginForm } from "../../components/authentication/LoginForm";
 
 export default function Login() {

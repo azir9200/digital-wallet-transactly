@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { useUserInfoQuery } from "@/redux/api/auth.api";
 import type { ReactNode } from "react";
 import type { TRole } from "@/types/authTypes";
 
@@ -8,19 +8,17 @@ interface ProtectedRouteProps {
   requiredRole?: TRole;
 }
 
-export function ProtectedRoute({
-  children,
-  requiredRole,
-}: ProtectedRouteProps) {
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { data, isLoading } = useUserInfoQuery(undefined);
+  const user = data?.data;
 
-  if (!isLoading && !data?.data?.email) {
+  if (!isLoading && !user) {
     return <Navigate to="/login" />;
   }
 
-  if (requiredRole && !isLoading && requiredRole !== data?.data?.role) {
-    return <Navigate to="/unauthorized" />;
-  }
+  // if (requiredRole && !isLoading && requiredRole !== data?.data?.role) {
+  //   return <Navigate to="/unauthorized" />;
+  // }
 
   return <>{children}</>;
 }

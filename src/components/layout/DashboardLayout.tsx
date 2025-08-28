@@ -19,7 +19,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { useUserInfoQuery } from "@/redux/api/auth.api";
+import { logout } from "@/redux/features/auth/authSlice";
+import Transaction from "../dashboard/userDashboard/Transaction";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -27,14 +29,15 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // const { user, logout } = useAuth();
-  const { data: user } = useUserInfoQuery(undefined);
 
+  const { data, isLoading } = useUserInfoQuery(undefined);
+  const user = data?.data;
+  console.log("dashboard layout", user);
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // logout();
+    logout();
     toast.success("You have logged out successfully");
     navigate("/");
   };
@@ -46,10 +49,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     ];
 
     switch (user?.role) {
-      case "user":
+      case "USER":
         return [
           ...baseItems.slice(0, 1),
           {
+            Component: Transaction,
             name: "Transactions",
             href: "/dashboard/transactions",
             icon: History,
@@ -58,7 +62,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           { name: "Deposit", href: "/dashboard/deposit", icon: CreditCard },
           baseItems[1], // Profile
         ];
-      case "agent":
+      case "AGENT":
         return [
           ...baseItems.slice(0, 1),
           {
@@ -78,7 +82,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           },
           baseItems[1], // Profile
         ];
-      case "admin":
+      case "ADMIN":
         return [
           ...baseItems.slice(0, 1),
           { name: "Users", href: "/dashboard/users", icon: Users },
@@ -101,9 +105,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const getRoleIcon = () => {
     switch (user?.role) {
-      case "admin":
+      case "ADMIN":
         return <Shield className="h-4 w-4" />;
-      case "agent":
+      case "AGENT":
         return <UserCheck className="h-4 w-4" />;
       default:
         return <User className="h-4 w-4" />;
@@ -112,9 +116,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const getRoleColor = () => {
     switch (user?.role) {
-      case "admin":
+      case "ADMIN":
         return "text-red-500";
-      case "agent":
+      case "AGENT":
         return "text-blue-500";
       default:
         return "text-primary";
@@ -146,7 +150,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 <Wallet className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                RemitSwift
+                Transactly
               </span>
             </Link>
           </div>

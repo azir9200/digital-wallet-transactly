@@ -1,7 +1,8 @@
 import UserDashboard from "./UserDashboard";
 import AgentDashboard from "./AgentDashboard";
 import AdminDashboard from "./AdminDashboard";
-import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { useUserInfoQuery } from "@/redux/api/auth.api";
+
 
 const Dashboard = () => {
   const { data: user } = useUserInfoQuery(undefined);

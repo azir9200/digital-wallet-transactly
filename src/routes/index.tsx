@@ -7,9 +7,9 @@ import FAQ from "@/pages/faq/FAQ";
 import Features from "@/pages/features/Features";
 import Home from "@/pages/home/Home";
 import { createBrowserRouter } from "react-router";
-import { ProtectedRoute } from "@/components/authentication/ProtectedRoute";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Dashboard from "@/pages/dashboard/Dashboard";
+import NotFound from "@/pages/notFound/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -52,12 +52,24 @@ export const router = createBrowserRouter([
       {
         path: "dashboard",
         element: (
-          <ProtectedRoute>
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
-          </ProtectedRoute>
+          <DashboardLayout>
+            <Dashboard />
+          </DashboardLayout>
         ),
+      },
+      // {
+      //   path: "dashboard",
+      //   element: (
+      //     <ProtectedRoute>
+      //       <DashboardLayout>
+      //         <Dashboard />
+      //       </DashboardLayout>
+      //     </ProtectedRoute>
+      //   ),
+      // },
+      {
+        Component: NotFound,
+        path: "*",
       },
 
       //     {/* Catch-all route */}

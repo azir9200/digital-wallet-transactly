@@ -9,11 +9,12 @@ import {
 } from "../ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import { useLoginMutation } from "@/redux/api/auth.api";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
 import { setCredentials } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hook";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
@@ -23,16 +24,16 @@ export function LoginForm({
   const location = useLocation();
   const dispatch = useAppDispatch();
 
-  const redirect = location.state?.from?.pathname || "/dashboard";
-  console.log("redirect", redirect);
+  const redirect = location.state?.from?.pathname || "/";
+
   const form = useForm();
   const [login] = useLoginMutation();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log("data login", data);
     try {
       const res = await login(data).unwrap();
-
+      console.log("data login", res);
       dispatch(setCredentials({ token: res.data.accessToken, user: null }));
+      toast("Welcome back to Transactly");
       navigate(redirect, { replace: true });
 
       console.log(res);
