@@ -10,6 +10,8 @@ import { createBrowserRouter } from "react-router";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import NotFound from "@/pages/notFound/NotFound";
+import UserDashboard from "@/pages/dashboard/UserDashboard";
+import AgentDashboard from "@/pages/dashboard/AgentDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +50,18 @@ export const router = createBrowserRouter([
       {
         Component: Register,
         path: "register",
+      },
+      {
+        Component: UserDashboard,
+        path: "/dashboard/user",
+      },
+      {
+        Component: AgentDashboard,
+        path: "/dashboard/agent",
+      },
+      {
+        Component: Register,
+        path: "/dashboard/admin",
       },
       {
         path: "dashboard",

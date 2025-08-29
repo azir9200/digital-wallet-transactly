@@ -30,6 +30,9 @@ const Navbar = () => {
     { name: "Features", href: "/features" },
     { name: "Contact", href: "/contact" },
     { name: "FAQ", href: "/faq" },
+    { name: "User", href: "/dashboard/user" },
+    { name: "Agent", href: "/dashboard/agent" },
+    { name: "Admin", href: "/dashboard/admin" },
     { name: "Dashboard", href: "/dashboard" },
   ];
 
