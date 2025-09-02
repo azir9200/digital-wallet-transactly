@@ -28,11 +28,22 @@ const navigationLinks = [
   { href: "/features", label: "Features" },
   { href: "/contact", label: "Contact" },
   { href: "/faq", label: "FAQ" },
-  { href: "/dashboard", label: "Dashboard", role: role.user },
+  // { href: "/admin", label: "Dashboard" },
+  { href: "/admin", label: "Dashboard", role: role.admin },
+  { href: "/agent", label: "Dashboard", role: role.agent },
+  { href: "/user", label: "Dashboard", role: role.user },
 ];
 
 export default function Navbar() {
-  const { data } = useUserInfoQuery(undefined);
+  const { data, isLoading, error } = useUserInfoQuery(undefined);
+  const user = data?.data;
+  if (isLoading) {
+    console.log("Loading user info...");
+  }
+
+  if (error) {
+    console.error("Failed to fetch user info", error);
+  }
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
@@ -106,19 +117,9 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <>
-                    {link.role === "PUBLIC" && (
-                      <NavigationMenuItem key={index}>
-                        <NavigationMenuLink
-                          asChild
-                          className="text-white hover:text-primary py-1.5 font-medium"
-                        >
-                          <Link to={link.href}>{link.label}</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    )}
-                    {link.role === data?.data?.role && (
+                {navigationLinks.map(
+                  (link, index) =>
+                    (!link.role || link.role === user?.role) && (
                       <NavigationMenuItem key={index}>
                         <NavigationMenuLink
                           asChild
@@ -127,9 +128,8 @@ export default function Navbar() {
                           <Link to={link.href}>{link.label}</Link>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
-                    )}
-                  </>
-                ))}
+                    )
+                )}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -137,16 +137,16 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center hover:text-primary gap-2">
           <ModeToggle />
-          {data?.data?.email && (
+          {user?.email && (
             <Button
               onClick={handleLogout}
               variant="outline"
               className="text-sm hover:text-primary hover:bg-destructive"
             >
-              Logout 
+              Logout
             </Button>
           )}
-          {!data?.data?.email && (
+          {!user?.email && (
             <Button asChild className="text-sm">
               <Link to="/login">Login</Link>
             </Button>

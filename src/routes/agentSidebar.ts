@@ -12,25 +12,15 @@ export const agentSidebarItems: ISidebarItem[] = [
         url: "/agent/transaction",
         component: Transaction,
       },
-    ],
-  },
-  {
-    title: "Commission",
-    items: [
-      {
-        title: "Commission",
-        url: "/agent/commission",
-        component: Commission,
-      },
-    ],
-  },
-  {
-    title: "CashOperations",
-    items: [
       {
         title: "CashOperations",
         url: "/agent/cashOperations",
         component: CashOperations,
+      },
+      {
+        title: "Commission",
+        url: "/agent/commission",
+        component: Commission,
       },
     ],
   },

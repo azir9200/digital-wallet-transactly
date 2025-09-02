@@ -1,4 +1,5 @@
 import SendMoney from "@/components/dashboard/userDashboard/SendMoney";
+import Transaction from "@/components/dashboard/userDashboard/Transaction";
 import type { ISidebarItem } from "@/types/authTypes";
 
 export const userSidebarItems: ISidebarItem[] = [
@@ -10,25 +11,15 @@ export const userSidebarItems: ISidebarItem[] = [
         url: "/user/sendMoney",
         component: SendMoney,
       },
-    ],
-  },
-  {
-    title: "Deposit",
-    items: [
       {
         title: "Deposit",
         url: "/user/sendMoney",
         component: SendMoney,
       },
-    ],
-  },
-  {
-    title: "History",
-    items: [
       {
-        title: "Send Money",
-        url: "/user/sendMoney",
-        component: SendMoney,
+        title: "Transaction",
+        url: "/user/transaction",
+        component: Transaction,
       },
     ],
   },

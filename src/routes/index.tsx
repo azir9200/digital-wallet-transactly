@@ -9,10 +9,13 @@ import Home from "@/pages/home/Home";
 import { createBrowserRouter } from "react-router";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import NotFound from "@/pages/notFound/NotFound";
-import SendMoney from "@/components/dashboard/userDashboard/SendMoney";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { adminSidebarItems } from "./adminSidebar";
 import { userSidebarItems } from "./userSidebar";
+import { agentSidebarItems } from "./agentSidebar";
+import { withAuth } from "@/utils/withAuth";
+import type { TRole } from "@/types/authTypes";
+import { role } from "@/constant/role";
 
 export const router = createBrowserRouter([
   {
@@ -55,24 +58,19 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout, role.superAdmin as TRole),
     path: "/admin",
     children: [...generateRoutes(adminSidebarItems)],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout, role.user as TRole),
     path: "/user",
     children: [...generateRoutes(userSidebarItems)],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout, role.agent as TRole),
     path: "/agent",
-    children: [
-      {
-        Component: SendMoney,
-        path: "sendMoney",
-      },
-    ],
+    children: [...generateRoutes(agentSidebarItems)],
   },
 
   {
