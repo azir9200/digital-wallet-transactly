@@ -1,4 +1,4 @@
-const Commitssion = () => {
+const Commission = () => {
   return (
     <div>
       <p>Commission page</p>
@@ -6,4 +6,4 @@ const Commitssion = () => {
   );
 };
 
-export default Commitssion;
+export default Commission;

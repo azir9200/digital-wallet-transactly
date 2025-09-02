@@ -6,7 +6,7 @@ export const authApi = baseApi.injectEndpoints({
       query: (userInfo) => ({
         url: "/user/register",
         method: "POST",
-        body: userInfo,
+        data: userInfo,
       }),
     }),
 
@@ -14,7 +14,7 @@ export const authApi = baseApi.injectEndpoints({
       query: (userInfo) => ({
         url: "/auth/login",
         method: "POST",
-        body: userInfo,
+        data: userInfo,
       }),
     }),
 
@@ -25,8 +25,20 @@ export const authApi = baseApi.injectEndpoints({
       }),
       // providesTags: ["USER"],
     }),
+    //logout
+    logout: builder.mutation({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["USER"],
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useUserInfoQuery } =
-  authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useUserInfoQuery,
+  useLogoutMutation,
+} = authApi;

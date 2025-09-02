@@ -8,10 +8,11 @@ import Features from "@/pages/features/Features";
 import Home from "@/pages/home/Home";
 import { createBrowserRouter } from "react-router";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import Dashboard from "@/pages/dashboard/Dashboard";
 import NotFound from "@/pages/notFound/NotFound";
-import UserDashboard from "@/pages/dashboard/UserDashboard";
-import AgentDashboard from "@/pages/dashboard/AgentDashboard";
+import SendMoney from "@/components/dashboard/userDashboard/SendMoney";
+import { generateRoutes } from "@/utils/generateRoutes";
+import { adminSidebarItems } from "./adminSidebar";
+import { userSidebarItems } from "./userSidebar";
 
 export const router = createBrowserRouter([
   {
@@ -51,43 +52,31 @@ export const router = createBrowserRouter([
         Component: Register,
         path: "register",
       },
-      {
-        Component: UserDashboard,
-        path: "/dashboard/user",
-      },
-      {
-        Component: AgentDashboard,
-        path: "/dashboard/agent",
-      },
-      {
-        Component: Register,
-        path: "/dashboard/admin",
-      },
-      {
-        path: "dashboard",
-        element: (
-          <DashboardLayout>
-            <Dashboard />
-          </DashboardLayout>
-        ),
-      },
-      // {
-      //   path: "dashboard",
-      //   element: (
-      //     <ProtectedRoute>
-      //       <DashboardLayout>
-      //         <Dashboard />
-      //       </DashboardLayout>
-      //     </ProtectedRoute>
-      //   ),
-      // },
-      {
-        Component: NotFound,
-        path: "*",
-      },
-
-      //     {/* Catch-all route */}
-      //     <Route path="*" element={<NotFound />} />
     ],
+  },
+  {
+    Component: DashboardLayout,
+    path: "/admin",
+    children: [...generateRoutes(adminSidebarItems)],
+  },
+  {
+    Component: DashboardLayout,
+    path: "/user",
+    children: [...generateRoutes(userSidebarItems)],
+  },
+  {
+    Component: DashboardLayout,
+    path: "/agent",
+    children: [
+      {
+        Component: SendMoney,
+        path: "sendMoney",
+      },
+    ],
+  },
+
+  {
+    Component: NotFound,
+    path: "*",
   },
 ]);

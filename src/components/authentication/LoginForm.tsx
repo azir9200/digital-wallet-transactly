@@ -12,33 +12,54 @@ import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/api/auth.api";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
-import { setCredentials } from "@/redux/features/auth/authSlice";
+import { setCredentials } from "@/redux/features/Authencation/authenticationSlice";
 import { useAppDispatch } from "@/redux/hook";
 import { toast } from "sonner";
+import config from "@/config";
 
 export function LoginForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const navigate = useNavigate();
-  const location = useLocation();
+  const form = useForm({
+    //! For development only
+    defaultValues: {
+      email: "user1@gmail.com",
+      password: "123456",
+    },
+  });
+  // const location = useLocation();
   const dispatch = useAppDispatch();
 
-  const redirect = location.state?.from?.pathname || "/";
+  // const redirect = location.state?.from?.pathname || "/";
 
-  const form = useForm();
   const [login] = useLoginMutation();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await login(data).unwrap();
       console.log("data login", res);
+      console.log("data login", res.data.accessToken);
+      const userData = res.data.accessToken;
+      if (!userData) {
+        toast.error("User does not found");
+      }
       dispatch(setCredentials({ token: res.data.accessToken, user: null }));
-      toast("Welcome back to Transactly");
-      navigate(redirect, { replace: true });
+      if (res.success) {
+        toast.success("Welcome back to Transactly");
+        navigate("/");
+      }
 
-      console.log(res);
-    } catch (err) {
+      // navigate(redirect, { replace: true });
+    } catch (err: unknown) {
       console.error(err);
+      if (err && typeof err === "object" && "data" in err) {
+        const errorObj = err as { data?: { message?: string } };
+
+        if (errorObj.data?.message === "Password does not match") {
+          toast.error("Invalid credentials");
+        }
+      }
     }
   };
 
@@ -61,7 +82,7 @@ export function LoginForm({
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="john@example.com"
+                      placeholder="email@example.com"
                       {...field}
                       value={field.value || ""}
                     />
@@ -102,7 +123,9 @@ export function LoginForm({
           </span>
         </div>
 
+        {/*//* http://localhost:5000/api/v1/auth/google */}
         <Button
+          onClick={() => window.open(`${config.baseUrl}/auth/google`)}
           type="button"
           variant="outline"
           className="w-full cursor-pointer"

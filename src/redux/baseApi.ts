@@ -1,21 +1,35 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "./axiosBaseQuery";
+
+// export const baseApi = createApi({
+//   reducerPath: "baseApi",
+//   baseQuery: fetchBaseQuery({
+//     baseUrl: "http://localhost:5000/api/v1",
+//     credentials: "include",
+
+//     prepareHeaders: (headers, { getState }) => {
+//       const state = getState() as RootState;
+//       console.log("base api", state);
+//       const token = state.auth?.token ?? "";
+//       console.log("base token", token)
+//       if (token) {
+//         headers.set("Authorization", `${token}`);
+//       }
+//       return headers;
+//     },
+//   }),
+//   tagTypes: ["USER"],
+//   endpoints: () => ({}),
+// });
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/v1",
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as any).auth?.token;
-      console.log("tok ", token);
-      if (token) {
-        headers.set("authorization", `${token}`);
-      }
-      return headers;
-    },
-  }),
-
-  tagTypes: ["USER"],
+  baseQuery: axiosBaseQuery(),
+  //   baseQuery: fetchBaseQuery({
+  //     baseUrl: config.baseUrl,
+  //     credentials: "include",
+  //   }),
+  tagTypes: ["USER", "TOUR", "DIVISION", "BOOKING"],
   endpoints: () => ({}),
 });
