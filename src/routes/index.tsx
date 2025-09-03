@@ -16,6 +16,7 @@ import { agentSidebarItems } from "./agentSidebar";
 import { withAuth } from "@/utils/withAuth";
 import type { TRole } from "@/types/authTypes";
 import { role } from "@/constant/role";
+import PersonalQuestionnaires from "@/components/dashboard/userDashboard/personalQues";
 
 export const router = createBrowserRouter([
   {
@@ -58,14 +59,20 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: withAuth(DashboardLayout, role.superAdmin as TRole),
+    Component: withAuth(DashboardLayout, role.admin as TRole),
     path: "/admin",
     children: [...generateRoutes(adminSidebarItems)],
   },
   {
     Component: withAuth(DashboardLayout, role.user as TRole),
     path: "/user",
-    children: [...generateRoutes(userSidebarItems)],
+    children: [
+      {
+        index: true,
+        Component: PersonalQuestionnaires,
+      },
+      ...generateRoutes(userSidebarItems),
+    ],
   },
   {
     Component: withAuth(DashboardLayout, role.agent as TRole),

@@ -40,7 +40,6 @@ export default function Navbar() {
   if (isLoading) {
     console.log("Loading user info...");
   }
-
   if (error) {
     console.error("Failed to fetch user info", error);
   }
@@ -53,7 +52,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="border-b">
+    <header className="border-b bg-teal-600 ">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
