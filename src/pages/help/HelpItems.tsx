@@ -1,0 +1,22 @@
+// Help menu items
+export const helpItems = [
+  { slug: "customer-care-points", label: "Customer Care Points" },
+  { slug: "avoid-fraud", label: "Avoid Fraud" },
+  { slug: "charge-calculator", label: "Charge Calculator" },
+  { slug: "faq", label: "Frequently Asked Questions" },
+  { slug: "charge-limits", label: "Charge and Limits" },
+  { slug: "interest-savings", label: "Interest on Savings" },
+  { slug: "reset-pin", label: "Reset Pin" },
+  { slug: "info-update", label: "Info Update" },
+  { slug: "contact-us", label: "Contact Us" },
+  { slug: "rewards", label: "Rewards" },
+  { slug: "security-tips", label: "Security Tips" },
+  { slug: "complaint-cell", label: "Complaint Cell" },
+  { slug: "discontinued-agents", label: "Discontinued Agents" },
+  { slug: "discontinued-distributors", label: "Discontinued Distributors" },
+  { slug: "manage-account", label: "Manage Account" },
+  { slug: "live-chat", label: "Live Chat" },
+  { slug: "help-line", label: "Help Line 16247" },
+  { slug: "e-appointment", label: "e-Appointment" },
+  { slug: "bkash-map", label: "bKash Map" },
+];

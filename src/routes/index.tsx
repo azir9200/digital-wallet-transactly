@@ -17,6 +17,8 @@ import { withAuth } from "@/utils/withAuth";
 import type { TRole } from "@/types/authTypes";
 import { role } from "@/constant/role";
 import PersonalQuestionnaires from "@/components/dashboard/userDashboard/personalQues";
+import Help from "@/pages/help/Help";
+import Career from "@/pages/career/Career";
 
 export const router = createBrowserRouter([
   {
@@ -40,12 +42,20 @@ export const router = createBrowserRouter([
         path: "contact",
       },
       {
+        Component: Career,
+        path: "career",
+      },
+      {
         Component: FAQ,
         path: "faq",
       },
       {
         Component: About,
         path: "about",
+      },
+      {
+        Component: Help,
+        path: "help",
       },
 
       {
