@@ -13,7 +13,6 @@ import {
 
 import { Link } from "react-router-dom";
 
-// import { Link } from "react-router";
 import { useAppDispatch } from "@/redux/hook";
 import { role } from "@/constant/role";
 import {
@@ -23,7 +22,6 @@ import {
 } from "@/redux/api/auth.api";
 
 import { ModeToggle } from "./moodToggler";
-import { helpItems } from "@/pages/help/HelpItems";
 
 const navigationLinks = [
   { href: "/", label: "Home" },
@@ -41,6 +39,7 @@ const navigationLinks = [
 export default function Navbar() {
   const { data, isLoading, error } = useUserInfoQuery(undefined);
   const user = data?.data;
+  console.log("user navbar", user);
   if (isLoading) {
     console.log("Loading user info...");
   }
@@ -56,11 +55,12 @@ export default function Navbar() {
   };
 
   return (
-    <header className="border-b bg-teal-600 ">
+    <header className="border-b bg-primary">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
           {/* Mobile menu trigger */}
+
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -105,29 +105,6 @@ export default function Navbar() {
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
-                  {/* Mobile Help dropdown */}
-                  <NavigationMenuItem className="w-full">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <NavigationMenuLink className="py-1.5 cursor-pointer">
-                          Help
-                        </NavigationMenuLink>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-56">
-                        <div className="grid gap-2">
-                          {helpItems.map((item, index) => (
-                            <Link
-                              key={index}
-                              to={`/help?section=${item.slug}`}
-                              className="block px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
-                            >
-                              {item.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
             </PopoverContent>
@@ -149,7 +126,7 @@ export default function Navbar() {
                       <NavigationMenuItem key={index}>
                         <NavigationMenuLink
                           asChild
-                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                          className="text-muted-foreground hover:text- py-1.5 font-medium"
                         >
                           <Link to={link.href}>{link.label}</Link>
                         </NavigationMenuLink>
@@ -157,7 +134,7 @@ export default function Navbar() {
                     )
                 )}
                 {/* Help dropdown for desktop */}
-                <NavigationMenuItem>
+                {/* <NavigationMenuItem>
                   <Popover>
                     <PopoverTrigger asChild>
                       <NavigationMenuLink className="text-muted-foreground hover:text-primary py-1.5 font-medium cursor-pointer">
@@ -178,7 +155,7 @@ export default function Navbar() {
                       </div>
                     </PopoverContent>
                   </Popover>
-                </NavigationMenuItem>
+                </NavigationMenuItem> */}
               </NavigationMenuList>
             </NavigationMenu>
           </div>

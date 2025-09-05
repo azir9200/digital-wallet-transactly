@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/api/auth.api";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { setCredentials } from "@/redux/features/Authencation/authenticationSlice";
 import { useAppDispatch } from "@/redux/hook";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ export function LoginForm({
   // const location = useLocation();
   const dispatch = useAppDispatch();
 
-  // const redirect = location.state?.from?.pathname || "/";
+  //  const redirect = location.state?.from?.pathname || "/";
 
   const [login] = useLoginMutation();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {

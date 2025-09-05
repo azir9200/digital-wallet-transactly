@@ -1,10 +1,9 @@
 import PersonalQuestionnaires from "@/components/dashboard/userDashboard/personalQues";
-import SendMoney from "@/components/dashboard/userDashboard/TransferMoney";
-
 import type { ISidebarItem } from "@/types/authTypes";
 import TransferMoney from "@/components/dashboard/userDashboard/TransferMoney";
 import Transaction from "@/components/dashboard/userDashboard/Transaction";
-
+import Deposit from "@/components/dashboard/userDashboard/Deposit";
+import Balance from "@/components/dashboard/userDashboard/Balance";
 
 export const userSidebarItems: ISidebarItem[] = [
   {
@@ -21,14 +20,14 @@ export const userSidebarItems: ISidebarItem[] = [
         component: TransferMoney,
       },
       {
-        title: "Send Money",
-        url: "/user/sendMoney",
-        component: SendMoney,
+        title: "My Balance",
+        url: "/user/balance",
+        component: Balance,
       },
       {
         title: "Deposit",
-        url: "/user/sendMoney",
-        component: SendMoney,
+        url: "/user/deposit",
+        component: Deposit,
       },
       {
         title: "Transaction",

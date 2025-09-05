@@ -14,6 +14,8 @@ import { ThemeProvider } from "./providers/theme.providers.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ReduxProvider store={store}>
+      {/* <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme"> */}
+
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <PersistGate loading={null} persistor={persistor}>
           <RouterProvider router={router} />

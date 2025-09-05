@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useTransferMutation } from "@/redux/api/transactionApi";
 
@@ -44,7 +45,7 @@ const TransferMoney = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-md">
+    <div className="bg-emerald-300 mx-auto mt-10 p-6 border rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4">Transfer Money</h2>
 
       {error && <p className="text-red-500 mb-2">{error}</p>}

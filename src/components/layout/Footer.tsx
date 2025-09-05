@@ -18,12 +18,12 @@ const Footer = () => {
       { name: "About Us", href: "/about" },
       { name: "Features", href: "/features" },
       { name: "Contact", href: "/contact" },
-      { name: "Careers", href: "/careers" },
+      { name: "Careers", href: "/career" },
     ],
     support: [
       { name: "Help Center", href: "/faq" },
       { name: "Privacy Policy", href: "/privacy" },
-      { name: "Terms of Service", href: "/terms" },
+      { name: "Terms of Service", href: "/help" },
       { name: "Security", href: "/security" },
     ],
     services: [
@@ -35,7 +35,7 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { name: "Twitter", href: "#", icon: Twitter },
+    { name: "Twitter", href: "https://www.linkedin.com/in/azir9200/", icon: Twitter },
     { name: "Facebook", href: "#", icon: Facebook },
     { name: "LinkedIn", href: "#", icon: Linkedin },
     { name: "Instagram", href: "#", icon: Instagram },
@@ -66,15 +66,15 @@ const Footer = () => {
               <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>support@remitswift.com</span>
+                  <span>support@transactly.com</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+353838485737</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4" />
-                  <span>New York, NY 10001</span>
+                  <span>Dublin-3, Ireland</span>
                 </div>
               </div>
             </div>
