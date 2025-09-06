@@ -19,7 +19,7 @@ import { useCashInMutation } from "@/redux/api/transactionApi";
 interface Customer {
   id: string;
   name: string;
-  phone: string;
+  phone?: string;
   email: string;
   balance: number;
 }
@@ -31,20 +31,22 @@ const CashOperations = () => {
   );
   const [amount, setAmount] = useState("");
   const [processing, setProcessing] = useState(false);
-  const [cashIn,] = useCashInMutation();
-  const { data, isLoading, } = useGetAllUserQuery(undefined);
+  const [cashIn] = useCashInMutation();
+  const { data, isLoading } = useGetAllUserQuery(undefined);
   const customers = data?.data || [];
   console.log("cash operation", customers);
-  
+
   const filteredCustomers = customers.filter(
     (customer: Customer) =>
-      customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customer.phone.includes(searchQuery) ||
-      customer.email.toLowerCase().includes(searchQuery.toLowerCase())
+      (customer.name?.toLowerCase() || "").includes(
+        searchQuery.toLowerCase()
+      ) ||
+      (customer.phone || "").includes(searchQuery) ||
+      (customer.email?.toLowerCase() || "").includes(searchQuery.toLowerCase())
   );
 
   const handleCashIn = async () => {
-    await cashIn()
+    // await cashIn();
     if (!selectedCustomer || !amount) {
       toast("Please select a customer and enter an amount");
       return;
@@ -147,8 +149,15 @@ const CashOperations = () => {
                         </p>
                       </div>
                     </div>
-                    <Badge variant="outline">
+                    {/* <Badge variant="outline">
                       ${customer?.balance?.toFixed(2)}
+                    </Badge> */}
+
+                    <Badge variant="outline">
+                      $
+                      {typeof customer?.balance === "number"
+                        ? customer.balance.toFixed(2)
+                        : "0.00"}
                     </Badge>
                   </div>
                 </div>
@@ -186,7 +195,10 @@ const CashOperations = () => {
                         Current Balance
                       </p>
                       <p className="text-lg font-semibold">
-                        ${selectedCustomer.balance.toFixed(2)}
+                        $
+                        {typeof selectedCustomer.balance === "number"
+                          ? selectedCustomer.balance.toFixed(2)
+                          : "0.00"}
                       </p>
                     </div>
                   </div>

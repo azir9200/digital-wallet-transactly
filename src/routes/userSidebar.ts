@@ -1,9 +1,12 @@
 import PersonalQuestionnaires from "@/components/dashboard/userDashboard/personalQues";
 import type { ISidebarItem } from "@/types/authTypes";
-import TransferMoney from "@/components/dashboard/userDashboard/TransferMoney";
-import Transaction from "@/components/dashboard/userDashboard/Transaction";
 import Deposit from "@/components/dashboard/userDashboard/Deposit";
 import Balance from "@/components/dashboard/userDashboard/Balance";
+import QuickActions from "@/components/dashboard/userDashboard/QuickActions";
+import RecentTransactions from "@/components/dashboard/userDashboard/RecentTransactions";
+import StatsCards from "@/components/dashboard/userDashboard/StatsCards";
+import WalletCard from "@/components/dashboard/userDashboard/WalletCard";
+import Setting from "@/components/dashboard/adminDashboard/Setting";
 
 export const userSidebarItems: ISidebarItem[] = [
   {
@@ -15,9 +18,24 @@ export const userSidebarItems: ISidebarItem[] = [
         component: PersonalQuestionnaires,
       },
       {
-        title: "Transfer Money",
-        url: "/user/transfer",
-        component: TransferMoney,
+        title: "Quick Actions",
+        url: "/user/actions",
+        component: QuickActions,
+      },
+      {
+        title: "Recent Transaction",
+        url: "/user/transactions",
+        component: RecentTransactions,
+      },
+      {
+        title: "Stats Cards",
+        url: "/user/stats",
+        component: StatsCards,
+      },
+      {
+        title: "Wallet Card",
+        url: "/user/wallet",
+        component: WalletCard,
       },
       {
         title: "My Balance",
@@ -30,20 +48,10 @@ export const userSidebarItems: ISidebarItem[] = [
         component: Deposit,
       },
       {
-        title: "Transaction",
-        url: "/user/transaction",
-        component: Transaction,
+        title: "Settings",
+        url: "/user/settings",
+        component: Setting,
       },
-      // {
-      //   title: "Add to Account",
-      //   url: "/transaction/cashIn",
-      //   component: CashIn,
-      // },
-      // {
-      //   title: "Cash Out",
-      //   url: "/transactions/cashOut",
-      //   component: CashOut,
-      // },
     ],
   },
 ];
