@@ -2,6 +2,7 @@ import Agents from "@/components/dashboard/adminDashboard/Agents";
 import Setting from "@/components/dashboard/adminDashboard/Setting";
 import Transaction from "@/components/dashboard/adminDashboard/Transaction";
 import Users from "@/components/dashboard/adminDashboard/Users";
+
 import type { ISidebarItem } from "@/types/authTypes";
 
 export const adminSidebarItems: ISidebarItem[] = [

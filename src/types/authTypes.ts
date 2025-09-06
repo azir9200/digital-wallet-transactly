@@ -1,6 +1,16 @@
 import type { ComponentType } from "react";
 
- export type TRole = "SUPER_ADMIN" | "ADMIN" | "AGENT" | "USER";
+export type TRole = "SUPER_ADMIN" | "ADMIN" | "AGENT" | "USER";
+
+ export type Status = "ACTIVE" | "InACTIVE" | "BLOCKED";
+
+export type AgentStatus = "pending" | "approved" | "suspended";
+
+// export enum Status {
+//   ACTIVE = "ACTIVE",
+//   InACTIVE = "InACTIVE",
+//   BLOCKED = "BLOCKED",
+// }
 
 export interface ILogin {
   email: string;
@@ -22,7 +32,6 @@ export interface ISidebarItem {
     component: ComponentType;
   }[];
 }
-
 
 type ZodIssue = {
   code: string;
