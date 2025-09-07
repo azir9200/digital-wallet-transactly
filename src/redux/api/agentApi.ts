@@ -1,6 +1,6 @@
 import { baseApi } from "@/redux/baseApi";
 
-export const adminApi = baseApi.injectEndpoints({
+export const agentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAgent: builder.query({
       query: () => ({
@@ -11,4 +11,4 @@ export const adminApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAgentQuery } = adminApi;
+export const { useGetAgentQuery } = agentApi;
