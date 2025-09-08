@@ -6,12 +6,6 @@ export type TRole = "SUPER_ADMIN" | "ADMIN" | "AGENT" | "USER";
 
 export type AgentStatus = "pending" | "approved" | "suspended";
 
-// export enum Status {
-//   ACTIVE = "ACTIVE",
-//   InACTIVE = "InACTIVE",
-//   BLOCKED = "BLOCKED",
-// }
-
 export interface ILogin {
   email: string;
   password: string;

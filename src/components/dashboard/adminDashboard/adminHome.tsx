@@ -69,7 +69,7 @@ const mockRecentActivity = [
   },
 ];
 
-const AdminDashboard = () => {
+const AdminHome = () => {
   const { data } = useUserInfoQuery(undefined);
   const user = data?.data;
 
@@ -358,4 +358,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminHome;

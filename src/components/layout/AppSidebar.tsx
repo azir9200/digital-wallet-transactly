@@ -43,7 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader className="items-center">
         <Link to="/">
           {" "}
-          <a href="#" className=" text-amber-50 hover:text-primary/90">
+          <a href="#" className=" hover:text-primary/90">
             <img
               src="https://i.ibb.co/g5VqtLk/Transactly-Financial-Services-Logo.png"
               alt="logo"

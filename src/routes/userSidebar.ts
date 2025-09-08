@@ -6,12 +6,18 @@ import QuickActions from "@/components/dashboard/userDashboard/QuickActions";
 import RecentTransactions from "@/components/dashboard/userDashboard/RecentTransactions";
 import StatsCards from "@/components/dashboard/userDashboard/StatsCards";
 import WalletCard from "@/components/dashboard/userDashboard/WalletCard";
-import Setting from "@/components/dashboard/adminDashboard/Setting";
+import Setting from "@/components/dashboard/adminDashboard/Settings";
+import UserHome from "@/components/dashboard/userDashboard/UserHome";
 
 export const userSidebarItems: ISidebarItem[] = [
   {
     title: "History",
     items: [
+      {
+        title: "User Home",
+        url: "/user/userHome",
+        component: UserHome,
+      },
       {
         title: "Personal Questionnaires",
         url: "/user/questionaries",

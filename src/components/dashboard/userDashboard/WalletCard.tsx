@@ -10,11 +10,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useUserInfoQuery } from "@/redux/api/auth.api";
+import { useGetMyTransactionQuery } from "@/redux/api/transactionApi";
 
 const WalletCard = () => {
   const [showBalance, setShowBalance] = useState(true);
-  const { data } = useUserInfoQuery(undefined);
+  const { data, isLoading, error } = useUserInfoQuery(undefined);
   const user = data?.data;
+
+  const { data: myTransactions } = useGetMyTransactionQuery(undefined);
+  const transaction = myTransactions?.data;
+  // console.log("object 1123", transaction);
+
+  if (isLoading) {
+    console.log("Loading user info...");
+  }
+  if (error) {
+    console.error("Failed to fetch user info", error);
+  }
 
   const getStatusBadge = () => {
     if (!user?.isVerified) {
@@ -84,7 +96,7 @@ const WalletCard = () => {
             </div>
             <div className="flex items-center space-x-2 text-sm text-blue-100">
               <CreditCard className="h-4 w-4" />
-              <span>ID: {user?.id}</span>
+              <span>ID: {user?._id}</span>
             </div>
           </div>
 
