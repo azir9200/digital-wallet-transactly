@@ -68,6 +68,7 @@ export const router = createBrowserRouter([
       },
     ],
   },
+ 
   {
     Component: withAuth(DashboardLayout, role.admin as TRole),
     path: "/admin",

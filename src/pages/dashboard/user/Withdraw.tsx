@@ -2,12 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import {
-  ArrowDownToLine,
-  Building2,
-  CreditCard,
-  DollarSign,
-} from "lucide-react";
+import { Building2, CreditCard } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -19,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -28,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const withdrawSchema = z.object({
   amount: z
@@ -46,7 +41,6 @@ type WithdrawForm = z.infer<typeof withdrawSchema>;
 const Withdraw = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("bank");
-  const { toast } = useToast();
 
   const {
     register,
@@ -64,18 +58,13 @@ const Withdraw = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      toast({
-        title: "Withdrawal Initiated",
-        description: `$${data.amount} withdrawal has been processed`,
-      });
+      toast(`Withdrawal Initiated",
+        $${data.amount} withdrawal has been processed`);
 
       reset();
     } catch (error) {
-      toast({
-        title: "Withdrawal Failed",
-        description: "Please try again later",
-        variant: "destructive",
-      });
+      console.log(error);
+      toast("Withdrawal Failed, Please try again later");
     } finally {
       setIsLoading(false);
     }

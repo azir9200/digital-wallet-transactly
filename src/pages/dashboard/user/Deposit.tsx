@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CreditCard, Building2, MapPin, DollarSign } from "lucide-react";
+import { CreditCard, Building2, MapPin } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
+
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const depositSchema = z.object({
   amount: z
@@ -43,7 +44,6 @@ type DepositForm = z.infer<typeof depositSchema>;
 const Deposit = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("card");
-  const { toast } = useToast();
 
   const {
     register,
@@ -54,25 +54,19 @@ const Deposit = () => {
     resolver: zodResolver(depositSchema),
   });
 
-  const onSubmit = async (data: DepositForm) => {
+  const onSubmit = async () => {
     setIsLoading(true);
 
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      toast({
-        title: "Deposit Successful",
-        description: `$${data.amount} has been added to your account`,
-      });
+      toast("$${data.amount} has been added to your account");
 
       reset();
     } catch (error) {
-      toast({
-        title: "Deposit Failed",
-        description: "Please try again later",
-        variant: "destructive",
-      });
+      console.log(error);
+      toast("Please try again later");
     } finally {
       setIsLoading(false);
     }

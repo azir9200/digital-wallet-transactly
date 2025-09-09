@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { UserPlus, Copy, Share2, Gift, Users, DollarSign } from "lucide-react";
 import {
   Card,
@@ -10,13 +10,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Referral = () => {
-  const { toast } = useToast();
-
+  
   const referralCode = "REF123ABC";
   const referralLink = `https://yourapp.com/register?ref=${referralCode}`;
 
@@ -73,10 +73,7 @@ const Referral = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied!",
-      description: "Referral link copied to clipboard",
-    });
+    toast("Copied!,Referral link copied to clipboard.");
   };
 
   const shareReferral = () => {

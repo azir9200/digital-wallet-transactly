@@ -1,8 +1,4 @@
-// import { useAuth } from '@/contexts/AuthContext';
-// import WalletCard from '@/components/dashboard/user/WalletCard';
-// import QuickActions from '@/components/dashboard/user/QuickActions';
-// import RecentTransactions from '@/components/dashboard/user/RecentTransactions';
-// import StatsCards from '@/components/dashboard/user/StatsCards';
+
 import { useUserInfoQuery } from "@/redux/api/auth.api";
 import WalletCard from "./WalletCard";
 import StatsCards from "./StatsCards";

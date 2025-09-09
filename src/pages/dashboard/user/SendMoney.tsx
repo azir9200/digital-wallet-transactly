@@ -14,8 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
+
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 const sendMoneySchema = z.object({
   recipient: z.string().min(1, "Recipient is required"),
@@ -33,7 +34,6 @@ type SendMoneyForm = z.infer<typeof sendMoneySchema>;
 
 const SendMoney = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
 
   const {
     register,
@@ -51,18 +51,12 @@ const SendMoney = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      toast({
-        title: "Money Sent Successfully",
-        description: `$${data.amount} has been sent to ${data.recipient}`,
-      });
+      toast(`Money Sent Successfully , ${data.amount} has been sent to ${data.recipient}`);
 
       reset();
     } catch (error) {
-      toast({
-        title: "Transfer Failed",
-        description: "Please try again later",
-        variant: "destructive",
-      });
+      console.log(error)
+      toast("Transfer Failed, Please try again later");
     } finally {
       setIsLoading(false);
     }

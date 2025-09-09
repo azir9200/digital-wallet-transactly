@@ -11,14 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 const QRCodePage = () => {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [qrGenerated, setQrGenerated] = useState(false);
-  const { toast } = useToast();
 
   const userAccountId = "USER123456789";
   const baseQRData = `pay:${userAccountId}`;
@@ -26,26 +25,16 @@ const QRCodePage = () => {
 
   const generateQR = () => {
     setQrGenerated(true);
-    toast({
-      title: "QR Code Generated",
-      description: "Your payment QR code is ready to share",
-    });
+    toast("QR Code Generated, Your payment QR code is ready to share");
   };
-
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied!",
-      description: "QR code data copied to clipboard",
-    });
+    toast("Copied!, QR code data copied to clipboard");
   };
 
   const downloadQR = () => {
     // Simulate QR code download
-    toast({
-      title: "Downloaded",
-      description: "QR code image saved to your device",
-    });
+    toast("Downloaded, QR code image saved to your device.");
   };
 
   const shareQR = () => {
