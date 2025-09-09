@@ -1,10 +1,8 @@
 import PersonalQuestionnaires from "@/components/dashboard/userDashboard/personalQues";
 import type { ISidebarItem } from "@/types/authTypes";
 import Balance from "@/components/dashboard/userDashboard/Balance";
-import QuickActions from "@/components/dashboard/userDashboard/QuickActions";
 import RecentTransactions from "@/components/dashboard/userDashboard/RecentTransactions";
 import StatsCards from "@/components/dashboard/userDashboard/StatsCards";
-import WalletCard from "@/components/dashboard/userDashboard/WalletCard";
 import Setting from "@/components/dashboard/adminDashboard/Settings";
 import UserHome from "@/components/dashboard/userDashboard/UserHome";
 import Deposit from "@/pages/dashboard/user/Deposit";
@@ -16,7 +14,7 @@ import Referral from "@/pages/dashboard/user/Referral";
 
 export const userSidebarItems: ISidebarItem[] = [
   {
-    title: "History",
+    title: "Welcome User",
     items: [
       {
         title: "User Home",
@@ -28,11 +26,7 @@ export const userSidebarItems: ISidebarItem[] = [
         url: "/user/questionaries",
         component: PersonalQuestionnaires,
       },
-      {
-        title: "Quick Actions",
-        url: "/user/actions",
-        component: QuickActions,
-      },
+
       {
         title: "Recent Transaction",
         url: "/user/transactions",
@@ -43,13 +37,9 @@ export const userSidebarItems: ISidebarItem[] = [
         url: "/user/stats",
         component: StatsCards,
       },
+
       {
-        title: "Wallet Card",
-        url: "/user/wallet",
-        component: WalletCard,
-      },
-      {
-        title: "My Balance",
+        title: "Check  Balance",
         url: "/user/balance",
         component: Balance,
       },

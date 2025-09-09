@@ -66,7 +66,18 @@ export function LoginForm({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Login to your account</h1>
+        <h1 className="text-2xl font-bold">Login to your account </h1>
+        <div className="flex justify-between gap-4">
+          <Button type="submit" className="w-1/3">
+            Admin
+          </Button>
+          <Button type="submit" className="w-1/3">
+            Agent
+          </Button>
+          <Button type="submit" className="w-1/3">
+            User
+          </Button>
+        </div>
         <p className="text-balance text-sm text-muted-foreground">
           Enter your email below to login to your account
         </p>
