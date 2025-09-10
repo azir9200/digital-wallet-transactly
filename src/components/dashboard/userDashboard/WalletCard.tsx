@@ -19,7 +19,7 @@ const WalletCard = () => {
 
   const { data: myTransactions } = useGetMyTransactionQuery(undefined);
   const transaction = myTransactions?.data;
-  // console.log("object 1123", transaction);
+   console.log("object 1123", transaction);
 
   if (isLoading) {
     console.log("Loading user info...");

@@ -9,77 +9,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-interface Transaction {
-  id: string;
-  type:
-    | "deposit"
-    | "withdrawal"
-    | "transfer"
-    | "received"
-    | "cashIn"
-    | "cashOut";
-  amount: number;
-  recipient?: string;
-  sender?: string;
-  status: "completed" | "pending" | "failed";
-  date: string;
-  reference: string;
-  fee?: number;
-  commission?: number;
-}
-
-const mockTransactions: Transaction[] = [
-  {
-    id: "1",
-    type: "received",
-    amount: 500.0,
-    sender: "John Smith",
-    status: "completed",
-    date: "2024-01-20",
-    reference: "TXN001",
-    fee: 5.0,
-  },
-  {
-    id: "2",
-    type: "transfer",
-    amount: 250.0,
-    recipient: "Jane Doe",
-    status: "completed",
-    date: "2024-01-19",
-    reference: "TXN002",
-    fee: 2.5,
-  },
-  {
-    id: "3",
-    type: "cashIn",
-    amount: 1000.0,
-    status: "completed",
-    date: "2024-01-18",
-    reference: "TXN003",
-    fee: 10.0,
-  },
-  {
-    id: "4",
-    type: "withdrawal",
-    amount: 100.0,
-    status: "pending",
-    date: "2024-01-17",
-    reference: "TXN004",
-    fee: 1.0,
-  },
-  {
-    id: "5",
-    type: "cashOut",
-    amount: 200.0,
-    status: "failed",
-    date: "2024-01-16",
-    reference: "TXN005",
-    fee: 2.0,
-  },
-];
+import { transactions, type Transaction } from "./data/transaction";
 
 const RecentTransactions = () => {
+  
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case "deposit":
@@ -176,7 +109,7 @@ const RecentTransactions = () => {
             </CardTitle>
             <CardDescription>Your latest wallet activity</CardDescription>
           </div>
-          <Link to="/dashboard/transactions">
+          <Link to="/user/transaction">
             <Button variant="outline" size="sm">
               View All
             </Button>
@@ -185,7 +118,7 @@ const RecentTransactions = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {mockTransactions.slice(0, 5).map((transaction) => (
+          {transactions.slice(0, 5).map((transaction) => (
             <div
               key={transaction.id}
               className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors"
@@ -212,7 +145,7 @@ const RecentTransactions = () => {
             </div>
           ))}
 
-          {mockTransactions.length === 0 && (
+          {transactions.length === 0 && (
             <div className="text-center py-8">
               <History className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">No transactions yet</p>

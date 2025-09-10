@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useCashInMutation } from "@/redux/api/transactionApi";
 
 const depositSchema = z.object({
   amount: z
@@ -42,9 +43,8 @@ const depositSchema = z.object({
 type DepositForm = z.infer<typeof depositSchema>;
 
 const Deposit = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("card");
-
+  const [cashIn, { isLoading }] = useCashInMutation();
   const {
     register,
     handleSubmit,
@@ -55,7 +55,7 @@ const Deposit = () => {
   });
 
   const onSubmit = async () => {
-    setIsLoading(true);
+    isLoading(true);
 
     try {
       // Simulate API call
@@ -68,7 +68,7 @@ const Deposit = () => {
       console.log(error);
       toast("Please try again later");
     } finally {
-      setIsLoading(false);
+      isLoading(false);
     }
   };
 

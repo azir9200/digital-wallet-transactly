@@ -22,15 +22,30 @@ export function LoginForm({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const form = useForm({
-    //! For development only
     defaultValues: {
-      email: "user1@gmail.com",
-      password: "123456",
+      email: "",
+      password: "",
     },
   });
-  // const location = useLocation();
-  const dispatch = useAppDispatch();
+
+  // const form = useForm({
+  //   //! For development only
+  //   defaultValues: {
+  //     email: "user1@gmail.com",
+  //     password: "123456",
+  //   },
+  //   defaultValues: {
+  //     email: "admin1@gmail.com",
+  //     password: "123456",
+  //   },
+  //   defaultValues: {
+  //     email: "agent1@gmail.com",
+  //     password: "123456",
+  //   },
+  // });
 
   //  const redirect = location.state?.from?.pathname || "/";
 
@@ -38,7 +53,7 @@ export function LoginForm({
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await login(data).unwrap();
-      console.log("data login", res);
+
       console.log("data login", res.data.accessToken);
       const userData = res.data.accessToken;
       if (!userData) {
@@ -62,19 +77,49 @@ export function LoginForm({
       }
     }
   };
+  // 👇 Helper to quickly fill login details
+  const fillCredentials = (role: "admin" | "agent" | "user") => {
+    switch (role) {
+      case "admin":
+        form.setValue("email", "admin1@gmail.com");
+        form.setValue("password", "123456");
+        break;
+      case "agent":
+        form.setValue("email", "agent1@gmail.com");
+        form.setValue("password", "123456");
+        break;
+      case "user":
+        form.setValue("email", "user1@gmail.com");
+        form.setValue("password", "123456");
+        break;
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account </h1>
+        {/* Quick login buttons */}
         <div className="flex justify-between gap-4">
-          <Button type="submit" className="w-1/3">
+          <Button
+            type="button"
+            className="w-1/3"
+            onClick={() => fillCredentials("admin")}
+          >
             Admin
           </Button>
-          <Button type="submit" className="w-1/3">
+          <Button
+            type="button"
+            className="w-1/3"
+            onClick={() => fillCredentials("agent")}
+          >
             Agent
           </Button>
-          <Button type="submit" className="w-1/3">
+          <Button
+            type="button"
+            className="w-1/3"
+            onClick={() => fillCredentials("user")}
+          >
             User
           </Button>
         </div>
