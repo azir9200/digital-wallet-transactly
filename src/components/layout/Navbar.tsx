@@ -57,6 +57,13 @@ export default function Navbar() {
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
+        <a href="#" className="text-primary  hover:text-primary/90">
+          <img
+            src="https://i.ibb.co/g5VqtLk/Transactly-Financial-Services-Logo.png"
+            alt="logo"
+            className="w-40 "
+          />
+        </a>
         {/* Left side */}
         <div className="flex items-center gap-2">
           {/* Mobile menu trigger */}
@@ -111,12 +118,6 @@ export default function Navbar() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
-              <img
-                src="https://i.ibb.co/g5VqtLk/Transactly-Financial-Services-Logo.png"
-                alt="logo"
-              />
-            </a>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">

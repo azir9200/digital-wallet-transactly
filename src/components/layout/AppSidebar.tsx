@@ -1,4 +1,4 @@
-import * as React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
@@ -7,23 +7,19 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-// import Logo from "@/assets/icons/Logo";
-import { Link } from "react-router";
 import {
   authApi,
   useLogoutMutation,
   useUserInfoQuery,
 } from "@/redux/api/auth.api";
-import { getSidebarItems } from "@/utils/getSidebarItems";
 import { useAppDispatch } from "@/redux/hook";
+import { getSidebarItems } from "@/utils/getSidebarItems";
+import { LogOut, User } from "lucide-react";
+import * as React from "react";
+import { NavLink } from "react-router-dom";
 import { Button } from "../ui/button";
-// import { getSidebarItems } from "@/utils/getSidebarItems";
-// import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userData } = useUserInfoQuery(undefined);
@@ -31,52 +27,76 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
     navMain: getSidebarItems(userData?.data?.role),
   };
+
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
+
   const handleLogout = async () => {
     await logout(undefined);
     dispatch(authApi.util.resetApiState());
   };
 
   return (
-    <Sidebar {...props}>
-      <SidebarHeader className="items-center">
-        <Link to="/">
-          {" "}
-          <a href="#" className=" hover:text-primary/90">
-            <img
-              src="https://i.ibb.co/g5VqtLk/Transactly-Financial-Services-Logo.png"
-              alt="logo"
-            />
-          </a>
-        </Link>
-      </SidebarHeader>
-      <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+    <Sidebar {...props} className="border-r">
+      {/* Logo */}
+      <SidebarHeader className="items-center p-2"></SidebarHeader>
+
+      {/* User profile */}
+      <div className="flex flex-col items-center gap-2 px-4 border-b">
+        <Avatar className="h-16 w-16">
+          <AvatarImage src="" />
+          <AvatarFallback className="bg-primary text-primary-foreground">
+            {userData?.data?.name?.charAt(0) || <User />}
+          </AvatarFallback>
+        </Avatar>
+        <div className="text-center">
+          <h3 className="font-medium">{userData?.data?.name || "User"}</h3>
+          <p className="text-xs text-muted-foreground">
+            {userData?.data?.role || "Role"}
+          </p>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <SidebarContent className="px-2">
+        {data.navMain.map((group) => (
+          <SidebarGroup key={group.title}>
+            <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground px-2 py-1">
+              {group.title}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link to={item.url}>{item.title}</Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
+              {group.items.map((item) => (
+                <NavLink
+                  key={item.title}
+                  to={item.url}
+                  end
+                  className={({ isActive }) =>
+                    `block w-full rounded-md px-3 py-2 text-sm font-medium transition-colors
+                    ${
+                      isActive
+                        ? "bg-secondary text-secondary-foreground"
+                        : "hover:bg-accent hover:text-accent-foreground"
+                    }`
+                  }
+                >
+                  {item.title}
+                </NavLink>
+              ))}
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
       </SidebarContent>
+
       <SidebarRail />
-      <SidebarFooter>
+
+      {/* Logout */}
+      <SidebarFooter className="p-4">
         <Button
           onClick={handleLogout}
           variant="outline"
-          className="text-sm hover:text-primary hover:bg-destructive"
+          className="w-full flex items-center gap-2 text-sm hover:text-destructive hover:border-destructive"
         >
+          <LogOut size={16} />
           Logout
         </Button>
       </SidebarFooter>

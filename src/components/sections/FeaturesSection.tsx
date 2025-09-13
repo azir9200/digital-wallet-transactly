@@ -25,8 +25,8 @@ const FeaturesSection = () => {
       title: "Lightning Fast",
       description:
         "Instant transfers in seconds, not days. Real-time processing for urgent payments.",
-      color: "text-accent",
-      bgColor: "bg-accent/10",
+      color: "",
+      bgColor: "bg-primary",
     },
     {
       icon: Shield,
@@ -101,7 +101,7 @@ const FeaturesSection = () => {
             return (
               <div key={index} className="text-center">
                 <div className="bg-gradient-primary p-3 rounded-lg w-fit mx-auto mb-3">
-                  <Icon className="w-6 h-6 text-white" />
+                  <Icon className="w-6 h-6" />
                 </div>
                 <div className="text-2xl md:text-3xl font-bold text-primary mb-1">
                   {stat.value}
