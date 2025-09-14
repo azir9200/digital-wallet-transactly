@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
-  Play,
   Shield,
   Zap,
   Globe,
   CheckCircle,
+  LogIn,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/assets/hero-wallet.jpg";
@@ -77,8 +77,8 @@ const HeroSection = () => {
                 size="lg"
                 className="w-full sm:w-auto"
               >
-                <Play className="w-5 h-5 mr-2" />
-                Watch Demo
+                <LogIn className="w-5 h-5 mr-2" />
+                Login Here
               </Button>
             </div>
 

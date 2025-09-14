@@ -12,7 +12,7 @@ const About = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-b from-blue-400 to-blue-300">
+      <section className="pt-8 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold  mb-6">
             About
@@ -36,7 +36,7 @@ const About = () => {
                 Our Mission
               </h2>
               <p className="text-lg text-muted-foreground mb-6">
-                At RemitSwift, we believe that sending money to loved ones
+                At Transactly, we believe that sending money to loved ones
                 should be as simple as sending a message. Traditional money
                 transfer services are often slow, expensive, and complicated.
               </p>
@@ -127,7 +127,7 @@ const About = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Journey</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               From a simple idea to serving millions worldwide - here's how
-              RemitSwift has evolved over the years.
+              Transactly has evolved over the years.
             </p>
           </div>
 
@@ -149,7 +149,7 @@ const About = () => {
                     }`}
                   >
                     <div className="bg-gradient-card rounded-lg p-6 shadow-md hover-lift">
-                      <div className="text-2xl font-bold text-primary mb-2">
+                      <div className="text-2xl font-bold text-destructive mb-2">
                         {item.year}
                       </div>
                       <h3 className="text-xl font-semibold mb-2">

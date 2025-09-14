@@ -1,13 +1,3 @@
-import {
-  Shield,
-  Zap,
-  Globe,
-  DollarSign,
-  Clock,
-  Users,
-  Smartphone,
-  CreditCard,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,75 +7,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { features, stats } from "./FeaturesData";
+import { CreditCard } from "lucide-react";
 
 const FeaturesSection = () => {
-  const features = [
-    {
-      icon: Zap,
-      title: "Lightning Fast",
-      description:
-        "Instant transfers in seconds, not days. Real-time processing for urgent payments.",
-      color: "",
-      bgColor: "bg-primary",
-    },
-    {
-      icon: Shield,
-      title: "Bank-Level Security",
-      description:
-        "256-bit encryption, fraud protection, and regulatory compliance for peace of mind.",
-      color: "text-primary",
-      bgColor: "bg-primary/10",
-    },
-    {
-      icon: DollarSign,
-      title: "Low Fees",
-      description:
-        "Transparent pricing with no hidden costs. Save up to 90% compared to traditional banks.",
-      color: "text-success",
-      bgColor: "bg-success/10",
-    },
-    {
-      icon: Globe,
-      title: "Global Reach",
-      description:
-        "Send money to 180+ countries with competitive exchange rates and local banking.",
-      color: "text-secondary",
-      bgColor: "bg-secondary/10",
-    },
-    {
-      icon: Clock,
-      title: "24/7 Service",
-      description:
-        "Round-the-clock support and instant processing. Your money moves when you need it.",
-      color: "text-accent",
-      bgColor: "bg-accent/10",
-    },
-    {
-      icon: Smartphone,
-      title: "Mobile First",
-      description:
-        "Intuitive mobile app with biometric security and offline transaction history.",
-      color: "text-primary",
-      bgColor: "bg-primary/10",
-    },
-  ];
-
-  const stats = [
-    { label: "Countries Supported", value: "180+", icon: Globe },
-    { label: "Active Users", value: "5M+", icon: Users },
-    { label: "Avg Transfer Time", value: "< 1min", icon: Clock },
-    { label: "Total Transferred", value: "$2.5B+", icon: DollarSign },
-  ];
-
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-4 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
             Why Choose
             <span className="block bg-gradient-primary bg-clip-text text-transparent">
-              RemitSwift?
+              Transactly?
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
@@ -160,9 +94,9 @@ const FeaturesSection = () => {
                     <CreditCard className="w-5 h-5 ml-2" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="lg">
+                {/* <Button variant="outline" size="lg">
                   View Pricing
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>
