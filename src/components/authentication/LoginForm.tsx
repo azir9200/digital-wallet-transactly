@@ -9,13 +9,14 @@ import {
 } from "../ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLoginMutation } from "@/redux/api/auth.api";
+import { useLoginMutation, useUserInfoQuery } from "@/redux/api/auth.api";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { setCredentials } from "@/redux/features/Authencation/authenticationSlice";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { toast } from "sonner";
 import config from "@/config";
+import { useEffect } from "react";
 
 export function LoginForm({
   className,
@@ -31,35 +32,30 @@ export function LoginForm({
     },
   });
 
-  // const form = useForm({
-  //   //! For development only
-  //   defaultValues: {
-  //     email: "user1@gmail.com",
-  //     password: "123456",
-  //   },
-  //   defaultValues: {
-  //     email: "admin1@gmail.com",
-  //     password: "123456",
-  //   },
-  //   defaultValues: {
-  //     email: "agent1@gmail.com",
-  //     password: "123456",
-  //   },
-  // });
-
-  //  const redirect = location.state?.from?.pathname || "/";
-
   const [login] = useLoginMutation();
+  const { token } = useAppSelector((state) => state.auth);
+  const { data: userInfo } = useUserInfoQuery(undefined, {
+    skip: !token,
+  });
+  useEffect(() => {
+    if (userInfo?.data?.role) {
+      if (userInfo.data.role === "ADMIN") navigate("/admin");
+      else if (userInfo.data.role === "AGENT") navigate("/agent");
+      else if (userInfo.data.role === "USER") navigate("/user");
+    }
+  }, [userInfo, navigate]);
+  //.........
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await login(data).unwrap();
 
-      console.log("data login", res.data.accessToken);
-      const userData = res.data.accessToken;
+      console.log("data login", res.data);
+      const userData = res.data;
       if (!userData) {
         toast.error("User does not found");
+        return;
       }
-      dispatch(setCredentials({ token: res.data.accessToken, user: null }));
+      dispatch(setCredentials({ token: res.data.accessToken }));
       if (res.success) {
         toast.success("Welcome back to Transactly");
         navigate("/");
@@ -77,7 +73,7 @@ export function LoginForm({
       }
     }
   };
-  // 👇 Helper to quickly fill login details
+  //  login details
   const fillCredentials = (role: "admin" | "agent" | "user") => {
     switch (role) {
       case "admin":

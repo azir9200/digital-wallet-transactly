@@ -16,9 +16,9 @@ import {
 } from "@/redux/api/auth.api";
 import { useAppDispatch } from "@/redux/hook";
 import { getSidebarItems } from "@/utils/getSidebarItems";
-import { LogOut, User } from "lucide-react";
+import { Home, LogOut, User } from "lucide-react";
 import * as React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Button } from "../ui/button";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -91,6 +91,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       {/* Logout */}
       <SidebarFooter className="p-4">
+        <Button
+          variant="outline"
+          className="w-full flex items-center gap-2 text-sm hover:text-destructive"
+        >
+          <Link to="/">
+            <Home size={16} />
+          </Link>
+        </Button>
+      </SidebarFooter>
+      {/* Logout */}
+      <SidebarFooter className="">
         <Button
           onClick={handleLogout}
           variant="outline"

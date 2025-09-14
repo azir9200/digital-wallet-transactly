@@ -135,34 +135,34 @@ const FAQ = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-b from-blue-400 to-blue-300">
+      <section className="pt-8 pb-8 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             Frequently Asked
             <span className="block bg-gradient-to-r from-accent-light to-warning bg-clip-text text-transparent">
               Questions
             </span>
           </h1>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8">
+          <p className="text-xl  max-w-3xl mx-auto mb-8">
             Find quick answers to common questions about RemitSwift's services,
             security, and transfer process.
           </p>
 
           {/* Search Bar */}
           <div className="max-w-md mx-auto relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-700 w-5 h-5" />
             <Input
               placeholder="Search FAQs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/60"
+              className="pl-10  border-blue-700 placeholder:text-blue-700"
             />
           </div>
         </div>
       </section>
 
       {/* FAQ Categories */}
-      <section className="py-20">
+      <section className="">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredFAQs.map((category, categoryIndex) => {
             const Icon = category.icon;
@@ -190,7 +190,7 @@ const FAQ = () => {
                           <AccordionTrigger className="text-left text-base font-medium hover:no-underline">
                             {faq.question}
                           </AccordionTrigger>
-                          <AccordionContent className="text-muted-foreground leading-relaxed">
+                          <AccordionContent className="leading-relaxed">
                             {faq.answer}
                           </AccordionContent>
                         </AccordionItem>
@@ -204,9 +204,9 @@ const FAQ = () => {
 
           {filteredFAQs.length === 0 && searchQuery && (
             <div className="text-center py-12">
-              <HelpCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <HelpCircle className="w-16 h-16  mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">No results found</h3>
-              <p className="text-muted-foreground">
+              <p className="">
                 Try adjusting your search or browse all categories above.
               </p>
             </div>
@@ -221,7 +221,7 @@ const FAQ = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Still Need Help?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg max-w-3xl mx-auto">
               Can't find what you're looking for? Our support team is available
               24/7 to help with any questions or concerns.
             </p>
@@ -231,7 +231,7 @@ const FAQ = () => {
             <Card className="text-center hover-lift bg-gradient-card border-0 shadow-md">
               <CardHeader>
                 <div className="bg-gradient-primary p-3 rounded-lg w-fit mx-auto mb-4">
-                  <HelpCircle className="w-6 h-6 text-white" />
+                  <HelpCircle className="w-8 h-8 text-blue-700" />
                 </div>
                 <CardTitle>Contact Support</CardTitle>
                 <CardDescription>
@@ -248,7 +248,7 @@ const FAQ = () => {
             <Card className="text-center hover-lift bg-gradient-card border-0 shadow-md">
               <CardHeader>
                 <div className="bg-gradient-secondary p-3 rounded-lg w-fit mx-auto mb-4">
-                  <Smartphone className="w-6 h-6 text-white" />
+                  <Smartphone className="w-8 h-8 text-blue-700" />
                 </div>
                 <CardTitle>Download App</CardTitle>
                 <CardDescription>
@@ -265,7 +265,7 @@ const FAQ = () => {
             <Card className="text-center hover-lift bg-gradient-card border-0 shadow-md">
               <CardHeader>
                 <div className="bg-gradient-accent p-3 rounded-lg w-fit mx-auto mb-4">
-                  <Shield className="w-6 h-6 text-white" />
+                  <Shield className="w-8 h-8 text-blue-700" />
                 </div>
                 <CardTitle>Security Center</CardTitle>
                 <CardDescription>

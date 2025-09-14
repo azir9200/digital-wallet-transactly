@@ -82,7 +82,7 @@ const About = () => {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 bg-muted/30">
+      <section className=" bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -100,11 +100,11 @@ const About = () => {
               return (
                 <Card
                   key={index}
-                  className="text-center hover-lift bg-gradient-card border-0 shadow-md"
+                  className="text-center hover-lift border-0 shadow-md"
                 >
                   <CardHeader>
                     <div className="bg-gradient-primary p-3 rounded-lg w-fit mx-auto mb-4">
-                      <Icon className="w-6 h-6 text-white" />
+                      <Icon className="w-6 h-6 text-blue-500" />
                     </div>
                     <CardTitle>{value.title}</CardTitle>
                   </CardHeader>
@@ -133,7 +133,7 @@ const About = () => {
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-primary/20 h-full"></div>
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-primary/40 h-full"></div>
 
             <div className="space-y-12">
               {timeline.map((item, index) => (

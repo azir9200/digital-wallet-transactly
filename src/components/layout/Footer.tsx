@@ -35,35 +35,37 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { name: "Twitter", href: "https://www.linkedin.com/in/azir9200/", icon: Twitter },
+    {
+      name: "Twitter",
+      href: "https://www.linkedin.com/in/azir9200/",
+      icon: Twitter,
+    },
     { name: "Facebook", href: "#", icon: Facebook },
     { name: "LinkedIn", href: "#", icon: Linkedin },
     { name: "Instagram", href: "#", icon: Instagram },
   ];
 
   return (
-    <footer className="bg-card border-t border-border">
+    <footer className=" border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="py-12 lg:py-16">
+        <div className="py-12 lg:py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Brand Section */}
             <div className="lg:col-span-1">
               <Link to="/" className="flex items-center space-x-2 mb-4">
-                <div className="bg-gradient-primary p-2 rounded-lg">
-                  <Wallet className="h-6 w-6 text-white" />
+                <div className=" p-2 rounded-lg">
+                  <Wallet className="h-6 w-6" />
                 </div>
-                <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  RemitSwift
-                </span>
+                <span className="text-xl font-bold ">Transactly</span>
               </Link>
-              <p className="text-muted-foreground mb-6 max-w-sm">
+              <p className=" mb-6 max-w-sm">
                 Secure, fast, and affordable international money transfers.
                 Trusted by millions worldwide for seamless financial solutions.
               </p>
 
               {/* Contact Info */}
-              <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="space-y-2 text-sm ">
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
                   <span>support@transactly.com</span>
@@ -81,13 +83,13 @@ const Footer = () => {
 
             {/* Links Sections */}
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Company</h3>
+              <h3 className="font-semibold  mb-4">Company</h3>
               <ul className="space-y-2">
                 {footerLinks.company.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-muted-foreground hover:text-primary transition-smooth"
+                      className=" hover:text-primary transition-smooth"
                     >
                       {link.name}
                     </Link>
@@ -103,7 +105,7 @@ const Footer = () => {
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-muted-foreground hover:text-primary transition-smooth"
+                      className="hover:text-primary transition-smooth"
                     >
                       {link.name}
                     </Link>
@@ -113,13 +115,13 @@ const Footer = () => {
             </div>
 
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Services</h3>
+              <h3 className="font-semibold  mb-4">Services</h3>
               <ul className="space-y-2">
                 {footerLinks.services.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-muted-foreground hover:text-primary transition-smooth"
+                      className=" hover:text-primary transition-smooth"
                     >
                       {link.name}
                     </Link>
@@ -139,7 +141,7 @@ const Footer = () => {
                     <a
                       key={social.name}
                       href={social.href}
-                      className="p-2 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground transition-smooth"
+                      className="p-2 rounded-lg hover:bg-primary hover:text-primary-foreground transition-smooth"
                       aria-label={social.name}
                     >
                       <Icon className="h-5 w-5" />

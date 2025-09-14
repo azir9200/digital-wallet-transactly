@@ -13,29 +13,27 @@ const Features = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="pt-20 pb-16">
+      <section className="pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             Powerful
-            <span className="block bg-gradient-to-r from-accent-light to-warning bg-clip-text text-transparent">
-              Features
-            </span>
+            <span className="block  ">Features</span>
           </h1>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto">
-            Discover all the tools and features that make RemitSwift the
+          <p className="text-xl max-w-3xl mx-auto">
+            Discover all the tools and features that make Transactly the
             smartest choice for international money transfers.
           </p>
         </div>
       </section>
 
       {/* Main Features */}
-      <section className="py-20">
+      <section className="">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Core Features
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg max-w-3xl mx-auto">
               Everything you need for secure, fast, and affordable international
               transfers.
             </p>
@@ -51,8 +49,8 @@ const Features = () => {
                 >
                   <CardHeader>
                     <div className="flex items-center space-x-4">
-                      <div className="bg-gradient-primary p-3 rounded-lg">
-                        <Icon className="w-8 h-8 text-white" />
+                      <div className=" p-3 rounded-lg">
+                        <Icon className="w-8 h-8 text-blue-400 " />
                       </div>
                       <div>
                         <CardTitle className="text-2xl">
@@ -69,9 +67,7 @@ const Features = () => {
                       {feature.benefits.map((benefit, idx) => (
                         <li key={idx} className="flex items-center space-x-2">
                           <CheckCircle className="w-4 h-4 text-success" />
-                          <span className="text-sm text-muted-foreground">
-                            {benefit}
-                          </span>
+                          <span className="text-sm ">{benefit}</span>
                         </li>
                       ))}
                     </ul>
@@ -84,13 +80,13 @@ const Features = () => {
       </section>
 
       {/* Additional Features Grid */}
-      <section className="py-20 bg-muted/30">
+      <section className="">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               More Features
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg  max-w-3xl mx-auto">
               Additional tools and capabilities to enhance your experience.
             </p>
           </div>
@@ -105,7 +101,7 @@ const Features = () => {
                 >
                   <CardHeader>
                     <div className="bg-gradient-secondary p-3 rounded-lg w-fit mx-auto mb-4">
-                      <Icon className="w-6 h-6 text-white" />
+                      <Icon className="w-8 h-8 text-blue-600" />
                     </div>
                     <CardTitle className="text-lg">{feature.title}</CardTitle>
                   </CardHeader>
@@ -120,14 +116,14 @@ const Features = () => {
       </section>
 
       {/* Comparison Table */}
-      <section className="py-20">
+      <section className="py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               How We Compare
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              See how RemitSwift stacks up against traditional banks and
+              See how Transactly stacks up against traditional banks and
               competitors.
             </p>
           </div>
@@ -138,7 +134,7 @@ const Features = () => {
                 <tr className="border-b border-border">
                   <th className="text-left py-4 px-4 font-semibold">Feature</th>
                   <th className="text-center py-4 px-4">
-                    <div className="font-bold text-primary">RemitSwift</div>
+                    <div className="font-bold text-primary">Transactly</div>
                   </th>
                   <th className="text-center py-4 px-4 text-muted-foreground">
                     Traditional Banks
@@ -172,13 +168,13 @@ const Features = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-hero">
+      <section className="">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Ready to Experience These Features?
           </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Join millions of users who trust RemitSwift for their international
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
+            Join millions of users who trust Transactly for their international
             transfers. Get started today and see the difference.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -4,7 +4,7 @@ import { Facebook, Linkedin, Twitter, Instagram } from "lucide-react";
 
 const Socials = () => {
   return (
-    <Card className="mt-10 shadow-md rounded-2xl">
+    <Card className="mt-10 bg-blue-50  shadow-md rounded-2xl">
       <CardContent className="p-8 text-center">
         <h2 className="text-2xl font-bold mb-4">
           Follow bKash Career on Social Media
@@ -14,7 +14,7 @@ const Socials = () => {
           opportunities, our vibrant culture, inspiring leadership, and our
           efforts in knowledge development and CSR activities.
         </p>
-        <div className="flex justify-center gap-4">
+        <div className="grid md: grid-cols-2  justify-center gap-4">
           <Button variant="outline" className="rounded-full" asChild>
             <a href="https://www.facebook.com/bkashlimited" target="_blank">
               <Facebook className="mr-2" size={18} /> Facebook

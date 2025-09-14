@@ -72,13 +72,14 @@ const HeroSection = () => {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Button
-                variant="destructive"
-                size="lg"
-                className="w-full sm:w-auto"
-              >
-                <LogIn className="w-5 h-5 mr-2" />
-                Login Here
+              <Button size="lg" className="w-full sm:w-auto">
+                <Link
+                  to="/login"
+                  className="flex items-center justify-center gap-2 w-full h-full"
+                >
+                  <LogIn className="w-5 h-5" />
+                  <span>Login Here</span>
+                </Link>
               </Button>
             </div>
 

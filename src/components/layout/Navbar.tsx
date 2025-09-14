@@ -57,7 +57,7 @@ export default function Navbar() {
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
-        <a href="#" className="text-primary  hover:text-primary/90">
+        <a href="#" className=" hover:text-primary/90">
           <img
             src="https://i.ibb.co/g5VqtLk/Transactly-Financial-Services-Logo.png"
             alt="logo"
@@ -134,29 +134,6 @@ export default function Navbar() {
                       </NavigationMenuItem>
                     )
                 )}
-                {/* Help dropdown for desktop */}
-                {/* <NavigationMenuItem>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <NavigationMenuLink className="text-muted-foreground hover:text-primary py-1.5 font-medium cursor-pointer">
-                        Help
-                      </NavigationMenuLink>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-64">
-                      <div className="grid gap-2">
-                        {helpItems.map((item, index) => (
-                          <Link
-                            key={index}
-                            to={`/help?section=${item.slug}`}
-                            className="block px-3 py-2 rounded-lg hover:bg-gray-100 text-sm"
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </NavigationMenuItem> */}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -168,7 +145,7 @@ export default function Navbar() {
             <Button
               onClick={handleLogout}
               variant="outline"
-              className="text-sm hover:text-primary hover:bg-destructive"
+              className="text-sm  hover:bg-blue-600"
             >
               Logout
             </Button>
