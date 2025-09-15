@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
-
   Form,
   FormControl,
   FormField,
@@ -30,7 +30,7 @@ const formSchema = z.object({
     .min(1, "Estimated Monthly Transactions is required"),
   usagePurposes: z.string().min(1, "Usage Purposes is required"),
   sourceOfFunds: z.string().min(1, "Source of funds is required"),
-  thirdPartyPayments: z.boolean().default(false),
+  thirdPartyPayments: z.boolean(),
 });
 
 const PersonalQuestionnaires = () => {
@@ -56,7 +56,7 @@ const PersonalQuestionnaires = () => {
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-xl font-semibold mb-6">Personal Questionnaire</h1>
 
-    <Form {...form as any}>
+      <Form {...(form as any)}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Occupation */}
           <FormField

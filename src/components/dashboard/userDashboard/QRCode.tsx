@@ -18,7 +18,7 @@ const QRCodePage = () => {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [qrGenerated, setQrGenerated] = useState(false);
-
+  console.log(qrGenerated);
   const userAccountId = "USER123456789";
   const baseQRData = `pay:${userAccountId}`;
   const dynamicQRData = amount ? `${baseQRData}:${amount}:${note}` : baseQRData;

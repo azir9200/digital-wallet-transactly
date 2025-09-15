@@ -45,6 +45,7 @@ type DepositForm = z.infer<typeof depositSchema>;
 const Deposit = () => {
   const [activeTab, setActiveTab] = useState("card");
   const [cashIn, { isLoading }] = useCashInMutation();
+  console.log(cashIn);
   const {
     register,
     handleSubmit,
@@ -55,8 +56,6 @@ const Deposit = () => {
   });
 
   const onSubmit = async () => {
-    isLoading(true);
-
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -67,8 +66,6 @@ const Deposit = () => {
     } catch (error) {
       console.log(error);
       toast("Please try again later");
-    } finally {
-      isLoading(false);
     }
   };
 

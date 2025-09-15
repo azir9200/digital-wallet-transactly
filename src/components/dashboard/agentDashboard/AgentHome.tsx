@@ -176,7 +176,7 @@ const AgentHome = () => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link to="/dashboard/agent/cash-operations">
+        <Link to="/agent/cashOperations">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
@@ -194,7 +194,7 @@ const AgentHome = () => {
           </Card>
         </Link>
 
-        <Link to="/dashboard/agent/transactions">
+        <Link to="/agent/transaction">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
@@ -212,7 +212,7 @@ const AgentHome = () => {
           </Card>
         </Link>
 
-        <Link to="/dashboard/agent/customers">
+        <Link to="/agent/customers">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
@@ -230,7 +230,7 @@ const AgentHome = () => {
           </Card>
         </Link>
 
-        <Link to="/dashboard/agent/commission">
+        <Link to="/agent/commission">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">

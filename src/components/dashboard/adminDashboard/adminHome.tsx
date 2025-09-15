@@ -19,55 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { useUserInfoQuery } from "@/redux/api/auth.api";
-
-interface SystemStats {
-  totalUsers: number;
-  totalAgents: number;
-  totalTransactions: number;
-  totalVolume: number;
-  activeUsers: number;
-  pendingApprovals: number;
-}
-
-const mockStats: SystemStats = {
-  totalUsers: 2847,
-  totalAgents: 156,
-  totalTransactions: 12580,
-  totalVolume: 2847592.5,
-  activeUsers: 1920,
-  pendingApprovals: 12,
-};
-
-const mockRecentActivity = [
-  {
-    id: "1",
-    type: "user_registration",
-    description: "New user registered: John Smith",
-    timestamp: "2 minutes ago",
-    status: "info",
-  },
-  {
-    id: "2",
-    type: "agent_approval",
-    description: "Agent approved: Jane Doe",
-    timestamp: "15 minutes ago",
-    status: "success",
-  },
-  {
-    id: "3",
-    type: "large_transaction",
-    description: "Large transaction: $5,000 transfer detected",
-    timestamp: "1 hour ago",
-    status: "warning",
-  },
-  {
-    id: "4",
-    type: "system_alert",
-    description: "System maintenance scheduled for tonight",
-    timestamp: "2 hours ago",
-    status: "info",
-  },
-];
+import { mockRecentActivity, mockStats } from "./data/mockRecentActivity";
 
 const AdminHome = () => {
   const { data } = useUserInfoQuery(undefined);
@@ -269,7 +221,7 @@ const AdminHome = () => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Link to="/dashboard/users">
+        <Link to="/admin/users">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
@@ -287,7 +239,7 @@ const AdminHome = () => {
           </Card>
         </Link>
 
-        <Link to="/dashboard/agents">
+        <Link to="/admin/agent">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
@@ -305,7 +257,7 @@ const AdminHome = () => {
           </Card>
         </Link>
 
-        <Link to="/dashboard/settings">
+        <Link to="setting">
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">

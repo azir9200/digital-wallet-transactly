@@ -1,8 +1,10 @@
-import AdminHome from "@/components/dashboard/adminDashboard/adminHome";
+
+import AdminHome from "@/components/dashboard/adminDashboard/AdminHome";
 import Agents from "@/components/dashboard/adminDashboard/Agents";
 import Setting from "@/components/dashboard/adminDashboard/Settings";
-import Transaction from "@/components/dashboard/adminDashboard/Transaction";
+
 import Users from "@/components/dashboard/adminDashboard/Users";
+import TransactionHistory from "@/components/dashboard/userDashboard/TransactionHistory";
 
 import type { ISidebarItem } from "@/types/authTypes";
 
@@ -18,7 +20,7 @@ export const adminSidebarItems: ISidebarItem[] = [
       {
         title: "Transaction",
         url: "/admin/transaction",
-        component: Transaction,
+        component: TransactionHistory,
       },
       {
         title: "Agent",

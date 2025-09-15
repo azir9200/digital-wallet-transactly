@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useGetAllUserQuery } from "@/redux/api/adminApi";
-import { useCashInMutation } from "@/redux/api/transactionApi";
 
 interface Customer {
   id: string;
@@ -31,7 +30,8 @@ const CashOperations = () => {
   );
   const [amount, setAmount] = useState("");
   const [processing, setProcessing] = useState(false);
-  const [cashIn] = useCashInMutation();
+  console.log(processing);
+  // const [cashIn] = useCashInMutation();
   const { data, isLoading } = useGetAllUserQuery(undefined);
   const customers = data?.data || [];
   console.log("cash operation", customers);

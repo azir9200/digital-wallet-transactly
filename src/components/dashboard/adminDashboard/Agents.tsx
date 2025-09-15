@@ -8,7 +8,7 @@ import {
   X,
   User,
   AlertCircle,
-  Loader2,
+ 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,11 +27,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { AgentStatus, Status } from "@/types/authTypes";
 import { useGetAgentQuery } from "@/redux/api/agentApi";
-// import { AgentStatus, Status, IsActive } from '@/contexts/AuthContext';
 
 interface Agent {
   id: string;
@@ -67,7 +66,7 @@ const Agents = () => {
     (a: any) => a.agentStatus === "suspended"
   );
   const handleAgentAction = (agentId: string, action: string) => {
-    agents((prev) =>
+    agents((prev: Agent[]) =>
       prev.map((agent: Agent) => {
         if (agent.id === agentId) {
           switch (action) {
