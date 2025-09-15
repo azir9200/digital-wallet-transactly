@@ -1,4 +1,3 @@
-
 import {
   DollarSign,
   TrendingUp,
@@ -260,7 +259,7 @@ const AgentHome = () => {
                 Your latest cash-in/out operations
               </CardDescription>
             </div>
-            <Link to="/dashboard/agent/transactions">
+            <Link to="/agent/transaction">
               <Button variant="outline" size="sm">
                 View All
               </Button>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { History, Search,  Download, Eye } from "lucide-react";
+import { History, Search, Download, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-
   Dialog,
   DialogContent,
   DialogHeader,
@@ -97,7 +96,7 @@ const mockTransactions: Transaction[] = [
 ];
 
 const TransactionHistory = () => {
-  const [transactions, setTransactions] = useState(mockTransactions);
+  const [transactions] = useState(mockTransactions);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [typeFilter, setTypeFilter] = useState("ALL");
@@ -117,7 +116,7 @@ const TransactionHistory = () => {
     );
   };
 
-  const getTransactionIcon = (type: string) => {
+  const getTransactionIcon = () => {
     // Return appropriate icon based on type
     return "💸";
   };
@@ -242,7 +241,7 @@ const TransactionHistory = () => {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span className="text-lg">
-                          {getTransactionIcon(transaction.type)}
+                          {getTransactionIcon()}
                         </span>
                         <span className="font-medium">
                           {transaction.type.replace("_", " ")}

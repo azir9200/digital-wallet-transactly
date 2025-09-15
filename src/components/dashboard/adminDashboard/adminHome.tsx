@@ -72,7 +72,7 @@ const mockRecentActivity = [
 const AdminHome = () => {
   const { data } = useUserInfoQuery(undefined);
   const user = data?.data;
-
+  console.log(user);
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "user_registration":

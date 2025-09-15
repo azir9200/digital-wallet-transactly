@@ -16,19 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  MessageCircle,
-  Headphones,
-} from "lucide-react";
+import { Mail, Phone, Clock, Headphones } from "lucide-react";
 import { useState } from "react";
-import { useToast } from "@/components/hooks/use-toast";
+import { contactInfo } from "./contactData";
+import { toast } from "sonner";
 
 const Contact = () => {
-  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -37,45 +30,12 @@ const Contact = () => {
     category: "",
   });
 
-  const contactInfo = [
-    {
-      icon: Mail,
-      title: "Email Support",
-      description: "Get help via email",
-      contact: "support@remitswift.com",
-      available: "24/7",
-    },
-    {
-      icon: Phone,
-      title: "Phone Support",
-      description: "Call us directly",
-      contact: "+1 (555) 123-4567",
-      available: "Mon-Fri 9AM-6PM EST",
-    },
-    {
-      icon: MessageCircle,
-      title: "Live Chat",
-      description: "Chat with our team",
-      contact: "Available in app",
-      available: "24/7",
-    },
-    {
-      icon: MapPin,
-      title: "Office Location",
-      description: "Visit our headquarters",
-      contact: "New York, NY 10001",
-      available: "Mon-Fri 9AM-5PM EST",
-    },
-  ];
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Simulate form submission
-    toast({
-      title: "Message Sent!",
-      description:
-        "Thank you for contacting us. We'll get back to you within 24 hours.",
-    });
+    toast(
+      "Message Sent!, Thank you for contacting us. We'll get back to you within 24 hours."
+    );
 
     // Reset form
     setFormData({
