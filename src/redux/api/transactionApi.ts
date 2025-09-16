@@ -40,7 +40,6 @@ export const transactionApi = baseApi.injectEndpoints({
         method: "POST",
         data: cashOutData,
       }),
-      //   invalidatesTags: [],
     }),
 
     getAllTransaction: builder.query({
@@ -62,12 +61,12 @@ export const transactionApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    // deleteTransaction: builder.query({
-    //   query: () => ({
-    //     url: "/transaction/:id",
-    //     method: "GET",
-    //   }),
-    // }),
+    getTransactionStat: builder.query({
+      query: () => ({
+        url: "/stats/transaction",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -80,4 +79,5 @@ export const {
   useGetAllTransactionQuery,
   useGetMyTransactionQuery,
   useUpdateTransactionQuery,
+  useGetTransactionStatQuery,
 } = transactionApi;

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Loader2, Wallet } from "lucide-react";
-import { useUserInfoQuery } from "@/redux/api/auth.api";
+import { useUserInfoQuery } from "@/redux/api/authApi";
 import { motion } from "framer-motion";
 import WalletCard from "./WalletCard";
 

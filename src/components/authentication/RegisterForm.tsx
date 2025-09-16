@@ -16,7 +16,7 @@ import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/Password";
-import { useRegisterMutation } from "@/redux/api/auth.api";
+import { useRegisterMutation } from "@/redux/api/authApi";
 import { toast } from "sonner";
 
 const registerSchema = z

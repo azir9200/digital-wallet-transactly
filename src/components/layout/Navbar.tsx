@@ -19,7 +19,7 @@ import {
   authApi,
   useLogoutMutation,
   useUserInfoQuery,
-} from "@/redux/api/auth.api";
+} from "@/redux/api/authApi";
 
 import { ModeToggle } from "./moodToggler";
 

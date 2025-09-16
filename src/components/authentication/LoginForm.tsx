@@ -9,7 +9,7 @@ import {
 } from "../ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLoginMutation, useUserInfoQuery } from "@/redux/api/auth.api";
+import { useLoginMutation, useUserInfoQuery } from "@/redux/api/authApi";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { setCredentials } from "@/redux/features/Authencation/authenticationSlice";

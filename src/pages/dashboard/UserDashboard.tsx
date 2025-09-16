@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { useUserInfoQuery } from "@/redux/api/auth.api";
+import { useUserInfoQuery } from "@/redux/api/authApi";
 
 interface Transaction {
   id: string;

@@ -13,7 +13,7 @@ import {
   authApi,
   useLogoutMutation,
   useUserInfoQuery,
-} from "@/redux/api/auth.api";
+} from "@/redux/api/authApi";
 import { useAppDispatch } from "@/redux/hook";
 import { getSidebarItems } from "@/utils/getSidebarItems";
 import { Home, LogOut, User } from "lucide-react";

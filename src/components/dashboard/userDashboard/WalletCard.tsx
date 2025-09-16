@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useUserInfoQuery } from "@/redux/api/auth.api";
+import { useUserInfoQuery } from "@/redux/api/authApi";
 import { useGetMyTransactionQuery } from "@/redux/api/transactionApi";
 
 const WalletCard = () => {
@@ -19,7 +19,7 @@ const WalletCard = () => {
 
   const { data: myTransactions } = useGetMyTransactionQuery(undefined);
   const transaction = myTransactions?.data;
-   console.log("object 1123", transaction);
+  console.log("object 1123", transaction);
 
   if (isLoading) {
     console.log("Loading user info...");

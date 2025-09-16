@@ -1,4 +1,4 @@
-import { useUserInfoQuery } from "@/redux/api/auth.api";
+import { useUserInfoQuery } from "@/redux/api/authApi";
 import WalletCard from "./WalletCard";
 import StatsCards from "./StatsCards";
 import QuickActions from "./QuickActions";
