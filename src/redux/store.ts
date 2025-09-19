@@ -11,7 +11,7 @@ import {
   REHYDRATE,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import authReducer from "../../src/redux/features/Authencation/authenticationSlice";
+import authReducer from "./features/Authentication/authenticationSlice";
 import { baseApi } from "./baseApi";
 
 const persistConfig = {
@@ -36,7 +36,6 @@ export const store = configureStore({
 });
 
 setupListeners(store.dispatch);
-
 
 export const persistor = persistStore(store);
 

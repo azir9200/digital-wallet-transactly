@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { useLoginMutation, useUserInfoQuery } from "@/redux/api/authApi";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { setCredentials } from "@/redux/features/Authencation/authenticationSlice";
+import { setCredentials } from "@/redux/features/Authentication/authenticationSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { toast } from "sonner";
 import config from "@/config";
@@ -34,9 +34,11 @@ export function LoginForm({
 
   const [login] = useLoginMutation();
   const { token } = useAppSelector((state) => state.auth);
+  console.log(" token =>login form", token);
   const { data: userInfo } = useUserInfoQuery(undefined, {
     skip: !token,
   });
+  console.log("user Info", userInfo);
   useEffect(() => {
     if (userInfo?.data?.role) {
       if (userInfo.data.role === "ADMIN") navigate("/admin");

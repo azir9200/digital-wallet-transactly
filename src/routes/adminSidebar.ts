@@ -1,7 +1,7 @@
-
 import AdminHome from "@/components/dashboard/adminDashboard/AdminHome";
 import Agents from "@/components/dashboard/adminDashboard/Agents";
 import Setting from "@/components/dashboard/adminDashboard/Settings";
+import StatTransactions from "@/components/dashboard/adminDashboard/StatTransaction";
 
 import Users from "@/components/dashboard/adminDashboard/Users";
 import TransactionHistory from "@/components/dashboard/userDashboard/TransactionHistory";
@@ -31,6 +31,11 @@ export const adminSidebarItems: ISidebarItem[] = [
         title: "Users",
         url: "/admin/users",
         component: Users,
+      },
+      {
+        title: "StatTrans",
+        url: "/admin/stat/trans",
+        component: StatTransactions,
       },
       {
         title: "Settings",
