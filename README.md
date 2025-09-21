@@ -1,69 +1,148 @@
-# React + TypeScript + Vite
+# 💳 Digital Wallet Frontend (React + Redux Toolkit + RTK Query)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **secure, role-based, and user-friendly** digital wallet frontend application built with **React.js**, **Redux Toolkit**, and **RTK Query**.  
+Inspired by systems like **bKash** and **Nagad**, this project enables **Users**, **Agents**, and **Admins** to perform financial operations and manage wallets seamlessly.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+### 🔓 Public Landing Section
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Responsive **Home Page** with hero banner, navigation, footer, and animations
+- **About, Features, Pricing (optional), Contact, and FAQ pages**
+- Smooth transitions, skeleton loaders, and polished UX
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🔑 Authentication
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- JWT-based **Login & Registration**
+- Role selection (**User** / **Agent**)
+- Persisted authentication state
+- Role-based redirection & Logout
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 👤 User Dashboard
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Wallet overview with balance & recent transactions
+- Deposit, Withdraw, and **Send Money**
+- Transaction history with filters & pagination
+- Profile management (update info & password)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🏦 Agent Dashboard
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Overview with **cash-in/out summary**
+- Add/Withdraw money for users
+- Transaction & commission history
+- Profile management
+
+### 🛠️ Admin Dashboard
+
+- System overview (users, agents, transactions, volume)
+- Manage **Users** (block/unblock) & **Agents** (approve/suspend)
+- Advanced search & filters on transactions
+- Adjustable system fees/limits (optional)
+- Profile management
+
+### 🌐 General Features
+
+- Role-based navigation
+- Global error handling & validations
+- Data visualization (charts, tables, cards)
+- **Toast Notifications** for feedback
+- **Guided Tour** (5+ steps with react-joyride/driver.js)
+- **Dark/Light mode**
+- Fully responsive, accessible, and optimized
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+
+- React + React Router
+- Redux Toolkit + RTK Query
+- TypeScript
+- Tailwind CSS
+
+**Backend (for API):**
+
+- Node.js + Express
+- MongoDB + Mongoose
+- JWT + bcrypt
+
+---
+
+## 🚀 Getting Started
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/your-username/digital-wallet-frontend.git
+cd digital-wallet-frontend
+
+Install dependencies
+npm install
+Setup environment variables
+
+Create a .env file in the root directory:
+
+VITE_API_URL=http://localhost:5000/api
+
+4️⃣ Run the app
+npm run dev
+
+
+Frontend will run at:
+👉 http://localhost:5173/
+
+📂 Project Structure
+src/
+ ┣ components/     # Reusable UI components
+ ┣ features/       # Redux slices & API services
+ ┣ pages/          # Route pages (Public + Dashboard)
+ ┣ layouts/        # Layouts for roles
+ ┣ hooks/          # Custom hooks
+ ┣ utils/          # Helpers & constants
+ ┣ App.tsx         # App entry with routes
+ ┗ main.tsx        # React DOM render
+
+🌍 Deployment
+
+Frontend: Live URL here
+
+Backend: API URL here
+
+🎥 Demo Video
+
+▶️ Watch Demo
+
+(Shows login/registration, wallet operations, filtering, and role management.)
+
+🔑 Test Credentials
+Admin
+Email: admin@wallet.com
+Password: Admin@123
+
+Agent
+Email: agent@wallet.com
+Password: Agent@123
+
+User
+Email: user@wallet.com
+Password: User@123
+
+🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+Feel free to fork this repo and submit pull requests.
+
+📜 License
+
+This project is licensed under the MIT License.
+
+👨‍💻 Author
+
+Your Name
+🔗 Portfolio
+ | LinkedIn
+ | Twitter
 ```
