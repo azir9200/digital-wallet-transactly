@@ -1,104 +1,91 @@
-import { useState } from "react";
-import {
-  CreditCard,
-  ArrowUpDown,
-  History,
-  Eye,
-  EyeOff,
-  TrendingUp,
-  ArrowDownToLine,
-  Send,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetMyTransactionQuery } from "@/redux/api/transactionApi";
+import { useGeMEWalletQuery } from "@/redux/api/userApi";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Eye,
+  Minus,
+  Plus,
+  Send,
+  TrendingDown,
+  TrendingUp,
+  Wallet,
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import { useUserInfoQuery } from "@/redux/api/authApi";
-
-interface Transaction {
-  id: string;
-  type: "deposit" | "withdrawal" | "transfer" | "received";
-  amount: number;
-  recipient?: string;
-  sender?: string;
-  status: "completed" | "pending" | "failed";
-  date: string;
-  reference: string;
-}
-
-const mockTransactions: Transaction[] = [
-  {
-    id: "1",
-    type: "received",
-    amount: 500.0,
-    sender: "John Smith",
-    status: "completed",
-    date: "2024-01-20",
-    reference: "TXN001",
-  },
-  {
-    id: "2",
-    type: "transfer",
-    amount: 250.0,
-    recipient: "Jane Doe",
-    status: "completed",
-    date: "2024-01-19",
-    reference: "TXN002",
-  },
-  {
-    id: "3",
-    type: "deposit",
-    amount: 1000.0,
-    status: "completed",
-    date: "2024-01-18",
-    reference: "TXN003",
-  },
-  {
-    id: "4",
-    type: "withdrawal",
-    amount: 100.0,
-    status: "pending",
-    date: "2024-01-17",
-    reference: "TXN004",
-  },
-];
 
 const UserDashboard = () => {
-  const [showBalance, setShowBalance] = useState(true);
-  const { data: user } = useUserInfoQuery(undefined);
+  // const { data } = useUserInfoQuery();
+  const { data } = useGeMEWalletQuery(undefined);
+  const { data: trans } = useGetMyTransactionQuery(undefined);
+
+  console.log(data);
+  // console.log(data);
+  const quickActions = [
+    {
+      title: "Send Money",
+      description: "Transfer to friends & family",
+      icon: Send,
+      href: "/user/send",
+      color: "bg-primary text-primary-foreground",
+    },
+    {
+      title: "Deposit",
+      description: "Add money via agent",
+      icon: Plus,
+      href: "/user/deposit",
+      color: "bg-success text-success-foreground",
+    },
+    {
+      title: "Withdraw",
+      description: "Cash out your money",
+      icon: Minus,
+      href: "/user/withdraw",
+      color: "bg-warning text-warning-foreground",
+    },
+    {
+      title: "View All",
+      description: "Transaction history",
+      icon: Eye,
+      href: "/user/transactions",
+      color: "bg-muted text-muted-foreground",
+    },
+  ];
+  const recently = trans?.data?.slice(0, 5);
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
-      case "deposit":
-        return <ArrowDownToLine className="h-4 w-4 text-green-500" />;
-      case "withdrawal":
-        return <ArrowUpDown className="h-4 w-4 text-orange-500" />;
-      case "transfer":
-        return <Send className="h-4 w-4 text-blue-500" />;
-      case "received":
-        return <ArrowDownToLine className="h-4 w-4 text-green-500" />;
+      case "SEND_MONEY":
+        return <ArrowUpRight className="w-4 h-4 text-destructive" />;
+      case "RECEIVE_MONEY":
+        return <ArrowDownLeft className="w-4 h-4 text-success" />;
+      case "DEPOSIT":
+        return <TrendingUp className="w-4 h-4 text-success" />;
+      case "WITHDRAW":
+        return <TrendingDown className="w-4 h-4 text-warning" />;
       default:
-        return <ArrowUpDown className="h-4 w-4" />;
+        return <ArrowUpRight className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed":
+      case "COMPLETED":
         return (
-          <Badge variant="default" className="bg-green-100 text-green-800">
+          <Badge className="bg-success text-success-foreground">
             Completed
           </Badge>
         );
-      case "pending":
-        return <Badge variant="secondary">Pending</Badge>;
-      case "failed":
+      case "PENDING":
+        return (
+          <Badge variant="outline" className="border-warning text-warning">
+            Pending
+          </Badge>
+        );
+      case "FAILED":
         return <Badge variant="destructive">Failed</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
@@ -107,162 +94,151 @@ const UserDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Welcome back, {user?.name}</h1>
-        <p className="text-muted-foreground">
-          Manage your wallet and send money globally
-        </p>
-      </div>
+      {/* Welcome Section */}
 
-      {/* Balance Card */}
-      <Card className="bg-gradient-primary text-white">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardDescription className="text-blue-100">
-                Available Balance
-              </CardDescription>
-              <CardTitle className="text-3xl font-bold">
-                {showBalance ? `$${user?.balance?.toFixed(2)}` : "••••••"}
-              </CardTitle>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowBalance(!showBalance)}
-              className="text-white hover:bg-white/20"
-            >
-              {showBalance ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
-            </Button>
-          </div>
+      {/* Wallet Balance Card */}
+      <Card className="bg-gradient-to-br from-primary via-primary to-accent text-white overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+        <CardHeader className="relative">
+          <CardTitle className="flex items-center space-x-2">
+            <Wallet className="w-6 h-6" />
+            <span>My Wallet</span>
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-2 text-sm text-blue-100">
-            <TrendingUp className="h-4 w-4" />
-            <span>+5.2% from last month</span>
+        <CardContent className="relative">
+          <div className="space-y-4">
+            <div>
+              <p className="text-white/80 text-sm">Available Balance</p>
+              <p className="text-3xl font-bold">{`${data?.data?.balance}`}</p>
+            </div>
+            <div className="flex items-center justify-between pt-4 border-t border-white/20">
+              <div>
+                <p className="text-white/80 text-xs">Daily Limit</p>
+                <p className="text-sm font-medium">
+                  ${`${data?.data?.dailyLimit}`}
+                </p>
+              </div>
+              <div>
+                <p className="text-white/80 text-xs">Monthly Limit</p>
+                <p className="text-sm font-medium">
+                  ${`${data?.data?.monthlyLimit}`}
+                </p>
+              </div>
+              <div>
+                <p className="text-white/80 text-xs">Status</p>
+                <p className="text-sm font-medium capitalize">{"Active"}</p>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Link to="/dashboard/send">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <Send className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Send Money</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Transfer to anyone
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link to="/dashboard/deposit">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-green-100 p-3 rounded-full">
-                  <CreditCard className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Add Money</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Via agent or card
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link to="/dashboard/transactions">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-purple-100 p-3 rounded-full">
-                  <History className="h-6 w-6 text-purple-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">History</h3>
-                  <p className="text-sm text-muted-foreground">
-                    View all transactions
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      </div>
+      <Card className="card-gradient">
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((action, index) => {
+              const IconComponent = action.icon;
+              return (
+                <Link key={index} to={action.href}>
+                  <Button
+                    variant="outline"
+                    className="h-20 w-full flex flex-col items-center space-y-2 hover:shadow-card transition-all duration-200 hover:scale-105"
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${action.color}`}
+                    >
+                      <IconComponent className="w-4 h-4" />
+                    </div>
+                    <div className="text-center">
+                      <p className="font-medium text-sm">{action.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {action.description}
+                      </p>
+                    </div>
+                  </Button>
+                </Link>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Recent Transactions */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Recent Transactions</CardTitle>
-              <CardDescription>Your latest wallet activity</CardDescription>
-            </div>
-            <Link to="/dashboard/transactions">
-              <Button variant="outline" size="sm">
-                View All
-              </Button>
-            </Link>
-          </div>
+      <Card className="card-gradient">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Recent Transactions</CardTitle>
+          <Link to="/user/transactions">
+            <Button variant="outline" size="sm">
+              View All
+            </Button>
+          </Link>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockTransactions.slice(0, 5).map((transaction) => (
+            {recently?.map((transaction: any, index: any) => (
               <div
-                key={transaction.id}
-                className="flex items-center justify-between"
+                key={index}
+                className="flex items-center justify-between p-4 bg-muted/30 rounded-lg"
               >
                 <div className="flex items-center space-x-4">
-                  {getTransactionIcon(transaction.type)}
+                  <div className="w-10 h-10 bg-card rounded-lg flex items-center justify-center">
+                    {getTransactionIcon(transaction.type)}
+                  </div>
                   <div>
-                    <p className="font-medium">
-                      {transaction.type === "transfer" &&
-                        `Sent to ${transaction.recipient}`}
-                      {transaction.type === "received" &&
-                        `Received from ${transaction.sender}`}
-                      {transaction.type === "deposit" && "Money Added"}
-                      {transaction.type === "withdrawal" && "Money Withdrawn"}
+                    <p className="font-medium text-foreground">
+                      {transaction.type
+                        .replace("_", " ")
+                        .toLowerCase()
+                        .replace(/\b\w/g, (l: string) => l.toUpperCase())}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {transaction.date} • {transaction.reference}
+                      {new Date(transaction.createdAt).toLocaleDateString()} •{" "}
+                      {transaction.description}
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p
-                    className={`font-semibold ${
-                      transaction.type === "transfer" ||
-                      transaction.type === "withdrawal"
-                        ? "text-red-600"
-                        : "text-green-600"
-                    }`}
-                  >
-                    {transaction.type === "transfer" ||
-                    transaction.type === "withdrawal"
-                      ? "-"
-                      : "+"}
-                    ${transaction.amount.toFixed(2)}
-                  </p>
+                <div className="text-right flex items-center space-x-3">
+                  <div>
+                    <p
+                      className={`font-semibold ${
+                        transaction.type === "RECEIVE_MONEY" ||
+                        transaction.type === "DEPOSIT"
+                          ? "text-success"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {transaction.type === "RECEIVE_MONEY" ||
+                      transaction.type === "DEPOSIT"
+                        ? "+"
+                        : "-"}
+                      ${transaction.amount.toFixed(2)}
+                    </p>
+                    {transaction.fee && transaction.fee > 0 && (
+                      <p className="text-xs text-muted-foreground">
+                        Fee: ${transaction.fee.toFixed(2)}
+                      </p>
+                    )}
+                  </div>
                   {getStatusBadge(transaction.status)}
                 </div>
               </div>
             ))}
+
+            {recently?.length === 0 && (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <ArrowUpRight className="w-8 h-8 text-muted-foreground" />
+                </div>
+                <p className="text-muted-foreground">No transactions yet</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Start by sending money or making a deposit
+                </p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

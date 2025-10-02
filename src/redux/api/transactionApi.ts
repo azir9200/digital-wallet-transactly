@@ -2,82 +2,75 @@ import { baseApi } from "@/redux/baseApi";
 
 export const transactionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    transfer: builder.mutation({
-      query: (transferData) => ({
-        url: "/transfer",
+    sendMoney: builder.mutation({
+      query: (userInfo) => ({
+        url: "/transactions/transfer",
         method: "POST",
-        data: transferData,
+        body: userInfo,
       }),
-      //   invalidatesTags: [],
+      invalidatesTags: ["Transaction"], // ✅ Refetch all transaction queries
     }),
+
     addMoney: builder.mutation({
-      query: (addMoneyData) => ({
-        url: "/addMoney",
+      query: (userInfo) => ({
+        url: "/transactions/addMoney",
         method: "POST",
-        data: addMoneyData,
+        body: userInfo,
       }),
-      //   invalidatesTags: [],
+      invalidatesTags: ["Transaction"], // ✅
     }),
+
     withdraw: builder.mutation({
-      query: (withdrawData) => ({
-        url: "/withdraw",
+      query: (userInfo) => ({
+        url: "/transactions/withdraw",
         method: "POST",
-        data: withdrawData,
+        body: userInfo,
       }),
-      //   invalidatesTags: [],
+      invalidatesTags: ["Transaction"], // ✅
     }),
+
     cashIn: builder.mutation({
       query: (cashInData) => ({
-        url: "/cashIn",
+        url: "/transactions/cashIn",
         method: "POST",
-        data: cashInData,
+        body: cashInData,
       }),
-      //   invalidatesTags: [],
+      invalidatesTags: ["Transaction"], // ✅
     }),
+
     cashOut: builder.mutation({
       query: (cashOutData) => ({
-        url: "/cashOut",
+        url: "/transactions/cashOut",
         method: "POST",
-        data: cashOutData,
+        body: cashOutData,
       }),
+      invalidatesTags: ["Transaction"], // ✅
     }),
 
     getAllTransaction: builder.query({
       query: () => ({
-        url: "/transactions",
+        url: "/transactions/all",
         method: "GET",
       }),
+      providesTags: ["Transaction"], // ✅ Provides tag for auto-refresh
     }),
 
     getMyTransaction: builder.query({
       query: () => ({
-        url: "/getMe",
+        url: "/transactions/getMe",
         method: "GET",
       }),
-    }),
-    updateTransaction: builder.query({
-      query: () => ({
-        url: "/transaction/:id",
-        method: "GET",
-      }),
-    }),
-    getTransactionStat: builder.query({
-      query: () => ({
-        url: "/stats/transaction",
-        method: "GET",
-      }),
+      providesTags: ["Transaction"], // ✅ Provides tag for auto-refresh
     }),
   }),
 });
 
 export const {
-  useTransferMutation,
+  useSendMoneyMutation,
   useAddMoneyMutation,
   useWithdrawMutation,
   useCashInMutation,
   useCashOutMutation,
   useGetAllTransactionQuery,
   useGetMyTransactionQuery,
-  useUpdateTransactionQuery,
-  useGetTransactionStatQuery,
 } = transactionApi;

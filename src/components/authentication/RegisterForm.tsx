@@ -10,26 +10,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Password from "@/components/ui/Password";
 import { cn } from "@/lib/utils";
+import { useRegisterMutation } from "@/redux/api/authApi";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Password from "@/components/ui/Password";
-import { useRegisterMutation } from "@/redux/api/authApi";
 import { toast } from "sonner";
+import { z } from "zod";
 
 const registerSchema = z
   .object({
-    name: z
-      .string()
-      .min(3, {
-        error: "Name is too short",
-      })
-      .max(50),
-    email: z.email(),
+    name: z.string().min(3, { error: "Name is too short" }).max(50),
+    email: z.string().email(),
     password: z.string(),
     confirmPassword: z.string(),
+    role: z.enum(["USER", "AGENT"]),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
@@ -42,16 +40,8 @@ export function RegisterForm({
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [register] = useRegisterMutation();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  // const form = useForm<z.infer<typeof registerSchema>>({
-  //   resolver: zodResolver(registerSchema),
-  //   defaultValues: {
-  //     name: "",
-  //     email: "",
-  //     password: "",
-  //     confirmPassword: "",
-  //   },
-  // });
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -59,24 +49,28 @@ export function RegisterForm({
       email: "john.doe@example.com",
       password: "123456",
       confirmPassword: "123456",
+      role: "USER", // default selected
     },
   });
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-    console.log("Form data", data);
     const userInfo = {
       name: data.name,
       email: data.email,
       password: data.password,
+      role: data.role, // ✅ include role
     };
-    console.log("userInfo", userInfo);
+
     try {
-      const result = await register(userInfo).unwrap();
-      console.log("object result", result);
+      setIsLoading(true);
+      const registerInfo = await register(userInfo).unwrap();
+      console.log("register info", registerInfo);
       toast.success("User created successfully");
-      navigate("/");
+      setIsLoading(false);
+      navigate("/login");
     } catch (error: any) {
       console.error(error);
+      setIsLoading(false);
       toast.error(error?.data?.message || "Registration failed");
     }
   };
@@ -93,6 +87,7 @@ export function RegisterForm({
       <div className="grid gap-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Name */}
             <FormField
               control={form.control}
               name="name"
@@ -109,6 +104,8 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
+
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -129,6 +126,8 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
+
+            {/* Password */}
             <FormField
               control={form.control}
               name="password"
@@ -145,6 +144,8 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
+
+            {/* Confirm Password */}
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -161,8 +162,51 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Submit
+
+            {/* Role */}
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <FormControl>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          value="USER"
+                          checked={field.value === "USER"}
+                          onChange={() => field.onChange("USER")}
+                        />
+                        User
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          value="AGENT"
+                          checked={field.value === "AGENT"}
+                          onChange={() => field.onChange("AGENT")}
+                        />
+                        Agent
+                      </label>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Submit */}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Creating account...
+                </span>
+              ) : (
+                "Create Account"
+              )}
             </Button>
           </form>
         </Form>
@@ -178,7 +222,7 @@ export function RegisterForm({
           variant="outline"
           className="w-full cursor-pointer"
         >
-          Login with Google
+          Sign up with Google
         </Button>
       </div>
 

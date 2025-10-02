@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { useGetAllUserQuery } from "@/redux/api/authApi";
+import { useGetAllUserQuery } from "@/redux/api/userApi";
 
 interface Customer {
   id: string;

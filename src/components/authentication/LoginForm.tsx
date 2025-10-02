@@ -1,4 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import config from "@/config";
+import { cn } from "@/lib/utils";
+// import { useLoginMutation, useUserInfoQuery } from "@/redux/api/auth.api";
+// import { setCredentials } from "@/redux/features/Authencation/authenticationSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -7,16 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { useLoginMutation, useUserInfoQuery } from "@/redux/api/authApi";
-import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
 import { setCredentials } from "@/redux/features/Authentication/authenticationSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { toast } from "sonner";
-import config from "@/config";
-import { useEffect } from "react";
 
 export function LoginForm({
   className,
@@ -31,40 +34,43 @@ export function LoginForm({
       password: "",
     },
   });
+  const [loading, setIsLoading] = useState(false);
 
   const [login] = useLoginMutation();
   const { token } = useAppSelector((state) => state.auth);
-  console.log(" token =>login form", token);
+  console.log("userInfo token", token);
   const { data: userInfo } = useUserInfoQuery(undefined, {
     skip: !token,
   });
-  console.log("user Info", userInfo);
+  console.log("userInfo login", userInfo);
   useEffect(() => {
     if (userInfo?.data?.role) {
       if (userInfo.data.role === "ADMIN") navigate("/admin");
       else if (userInfo.data.role === "AGENT") navigate("/agent");
-      else if (userInfo.data.role === "USER") navigate("/user");
+      else if (userInfo.data.role === "USER") navigate("/user/userHome");
     }
   }, [userInfo, navigate]);
-  //.........
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
+      setIsLoading(true);
+      console.log(data);
       const res = await login(data).unwrap();
-
-      console.log("data login", res.data);
-      const userData = res.data;
-      if (!userData) {
-        toast.error("User does not found");
-        return;
-      }
-      dispatch(setCredentials({ token: res.data.accessToken }));
+      console.log("login form", res);
       if (res.success) {
-        toast.success("Welcome back to Transactly");
-        navigate("/");
+        toast.success(`Successful login...`);
+        const cleanToken = res.data.accessToken.trim();
+        dispatch(setCredentials({ token: cleanToken, user: res.data.user }));
+        setIsLoading(false);
+      } else {
+        toast.error(`${res.message}`);
+        setIsLoading(false);
       }
 
-      // navigate(redirect, { replace: true });
+      // Ensure token is properly formatted before storing
     } catch (err: unknown) {
+      setIsLoading(false);
+
       console.error(err);
       if (err && typeof err === "object" && "data" in err) {
         const errorObj = err as { data?: { message?: string } };
@@ -75,7 +81,7 @@ export function LoginForm({
       }
     }
   };
-  //  login details
+  // 👇 Helper to quickly fill login details
   const fillCredentials = (role: "admin" | "agent" | "user") => {
     switch (role) {
       case "admin":
@@ -165,8 +171,15 @@ export function LoginForm({
               )}
             />
 
-            <Button type="submit" className="w-full">
-              Login
+            <Button disabled={loading} type="submit" className="w-full">
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Login...
+                </span>
+              ) : (
+                "Login"
+              )}
             </Button>
           </form>
         </Form>

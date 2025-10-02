@@ -10,14 +10,13 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import authReducer from "./features/Authentication/authenticationSlice";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage
+import authReducer from "../redux/features/Authentication/authenticationSlice";
 import { baseApi } from "./baseApi";
 
 const persistConfig = {
   key: "auth",
   storage,
-  whitelist: ["auth"],
 };
 
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
@@ -37,6 +36,7 @@ export const store = configureStore({
 
 setupListeners(store.dispatch);
 
+// Create persistor
 export const persistor = persistStore(store);
 
 // Infer RootState and AppDispatch types

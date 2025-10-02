@@ -8,7 +8,15 @@ export const agentApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getAllWallet: builder.query({
+      query: () => ({
+        url: "/wallet",
+        method: "GET",
+      }),
+      providesTags: ["Transaction"],
+    }),
   }),
 });
 
-export const { useGetAgentQuery } = agentApi;
+export const { useGetAgentQuery, useGetAllWalletQuery } = agentApi;

@@ -4,49 +4,39 @@ import Balance from "@/components/dashboard/userDashboard/Balance";
 import RecentTransactions from "@/components/dashboard/userDashboard/RecentTransactions";
 import StatsCards from "@/components/dashboard/userDashboard/StatsCards";
 import Setting from "@/components/dashboard/adminDashboard/Settings";
-import UserHome from "@/components/dashboard/userDashboard/UserHome";
 import Deposit from "@/components/dashboard/userDashboard/Deposit";
 import SendMoney from "@/components/dashboard/userDashboard/SendMoney";
 import Withdraw from "@/components/dashboard/userDashboard/Withdraw";
 import TransactionHistory from "@/components/dashboard/userDashboard/TransactionHistory";
 import QRCodePage from "@/components/dashboard/userDashboard/QRCode";
 import Referral from "@/components/dashboard/userDashboard/Referral";
+import UserDashboard from "@/pages/dashboard/UserDashboard";
+import CashOut from "@/components/dashboard/userDashboard/CashOut";
+import UserProfile from "@/components/share/Profile";
 
 export const userSidebarItems: ISidebarItem[] = [
   {
     title: "Welcome User",
     items: [
       {
-        title: "User Home",
+        title: "Dashboard",
         url: "/user/userHome",
-        component: UserHome,
+        component: UserDashboard,
       },
       {
         title: "Personal Questionnaires",
         url: "/user/questionaries",
         component: PersonalQuestionnaires,
       },
-
       {
-        title: "Recent Transaction",
-        url: "/user/transactions",
-        component: RecentTransactions,
-      },
-      {
-        title: "Stats Cards",
-        url: "/user/stats",
-        component: StatsCards,
-      },
-
-      {
-        title: "Check  Balance",
-        url: "/user/balance",
-        component: Balance,
-      },
-      {
-        title: "Send",
+        title: "Send Money",
         url: "/user/send",
         component: SendMoney,
+      },
+      {
+        title: "Cash Out",
+        url: "/user/CashOut",
+        component: CashOut,
       },
       {
         title: "Deposit",
@@ -58,11 +48,39 @@ export const userSidebarItems: ISidebarItem[] = [
         url: "/user/withdraw",
         component: Withdraw,
       },
-      {
+ {
         title: "Transaction",
-        url: "/user/transaction",
+        url: "/user/transactions",
         component: TransactionHistory,
       },
+
+      {
+        title: "profile",
+        url: "/user/profile",
+        component: UserProfile,
+      },
+
+
+
+
+      // {
+      //   title: "Recent Transaction",
+      //   url: "/user/transactions",
+      //   component: RecentTransactions,
+      // },
+      {
+        title: "Stats Cards",
+        url: "/user/stats",
+        component: StatsCards,
+      },
+
+      {
+        title: "Check  Balance",
+        url: "/user/balance",
+        component: Balance,
+      },
+
+
       {
         title: "QRCode",
         url: "/user/qrcode",

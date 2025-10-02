@@ -56,9 +56,9 @@ const Contact = () => {
       {/* Hero Section */}
       <section className="pt-8 pb-8 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl text-blue-700 md:text-5xl lg:text-6xl font-bold mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             Contact
-            <span className="pl-4 text-blue-400 ">Support</span>
+            <span className="pl-4 ">Support</span>
           </h1>
           <p className="text-xl  max-w-3xl mx-auto">
             Have questions? Need help with a transfer? Our support team is here
@@ -71,7 +71,7 @@ const Contact = () => {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl text-blue-700 md:text-4xl font-bold mb-6">
+            <h2 className="text-3xl  md:text-4xl font-bold mb-6">
               Get in Touch
             </h2>
             <p className="text-lg  max-w-3xl mx-auto">

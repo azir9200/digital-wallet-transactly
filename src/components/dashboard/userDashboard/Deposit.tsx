@@ -1,8 +1,5 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { CreditCard, Building2, MapPin } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,302 +7,312 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { Badge } from "@/components/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  useAddMoneyMutation,
+  useGetMyTransactionQuery,
+} from "@/redux/api/transactionApi";
+import {
+  Building2,
+  CheckCircle,
+  Clock,
+  CreditCard,
+  Plus,
+  Smartphone,
+} from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { useCashInMutation } from "@/redux/api/transactionApi";
 
-const depositSchema = z.object({
-  amount: z
-    .string()
-    .min(1, "Amount is required")
-    .refine(
-      (val) => !isNaN(Number(val)) && Number(val) > 0,
-      "Amount must be a positive number"
-    ),
-  cardNumber: z.string().optional(),
-  expiryDate: z.string().optional(),
-  cvv: z.string().optional(),
-  agentCode: z.string().optional(),
-});
+const UserDeposit = () => {
+  const [depositMethod, setDepositMethod] = useState("bank");
+  const [amount, setAmount] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [addMoney] = useAddMoneyMutation();
+  const { data: Transfers } = useGetMyTransactionQuery(undefined);
+  const recentDeposits = Transfers?.data?.filter(
+    (item: any) => item.type == "ADD_MONEY"
+  );
+  const depositMethods = [
+    {
+      id: "bank",
+      name: "Bank Transfer",
+      icon: Building2,
+      fee: "Free",
+      time: "1-2 business days",
+      description: "Transfer from your linked bank account",
+    },
+    {
+      id: "card",
+      name: "Debit/Credit Card",
+      icon: CreditCard,
+      fee: "2.9%",
+      time: "Instant",
+      description: "Add money using your debit or credit card",
+    },
+    {
+      id: "mobile",
+      name: "Mobile Money",
+      icon: Smartphone,
+      fee: "1.5%",
+      time: "Instant",
+      description: "Deposit via mobile money services",
+    },
+  ];
 
-type DepositForm = z.infer<typeof depositSchema>;
+  const handleDeposit = async () => {
+    if (!amount || parseFloat(amount) < 10) {
+      toast.error("Please enter a valid amount (minimum $10).");
+      return;
+    }
 
-const Deposit = () => {
-  const [activeTab, setActiveTab] = useState("card");
-  const [cashIn, { isLoading }] = useCashInMutation();
-  console.log(cashIn);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<DepositForm>({
-    resolver: zodResolver(depositSchema),
-  });
+    setProcessing(true);
 
-  const onSubmit = async () => {
+    // ✅ Prepare correct payload
+    const payload = {
+      amount: parseFloat(amount),
+      method: depositMethod,
+    };
+
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      toast("$${data.amount} has been added to your account");
-
-      reset();
-    } catch (error) {
-      console.log(error);
-      toast("Please try again later");
+      const res = await addMoney(payload).unwrap(); // ✅ unwrap() gives direct data or throws error
+      console.log(res);
+      if (res.success) {
+        toast.success(res.message || "Deposit successful!");
+        setAmount(""); // ✅ reset amount
+      } else {
+        toast.error(res.error.data.message || "Deposit failed!");
+      }
+    } catch (err) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setProcessing(false);
     }
   };
 
-  const agents = [
-    { id: "1", name: "Agent Store A", distance: "0.5 km", rating: 4.8 },
-    { id: "2", name: "Agent Store B", distance: "1.2 km", rating: 4.6 },
-    { id: "3", name: "Agent Store C", distance: "2.1 km", rating: 4.9 },
-  ];
+  const selectedMethod = depositMethods.find(
+    (method) => method.id === depositMethod
+  );
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-          Add Money
-        </h1>
-        <p className="text-muted-foreground">
-          Add money to your wallet using cards or through agents
-        </p>
-      </div>
+    <div className="flex min-h-screen bg-gradient-subtle">
+      <main className="flex-1 p-6 space-y-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold bg-primary bg-clip-text text-transparent">
+              Deposit Money
+            </h1>
+            <p className="text-muted-foreground">
+              Add money to your PayWallet account
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Badge variant="outline">Current Balance: $2,547.85</Badge>
+          </div>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="card" className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4" />
-                Credit/Debit Card
-              </TabsTrigger>
-              <TabsTrigger value="agent" className="flex items-center gap-2">
-                <Building2 className="h-4 w-4" />
-                Via Agent
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="card" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Card Deposit</CardTitle>
-                  <CardDescription>
-                    Add money using your credit or debit card
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="amount">Amount</Label>
-                      <Input
-                        id="amount"
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        {...register("amount")}
-                      />
-                      {errors.amount && (
-                        <p className="text-sm text-destructive">
-                          {errors.amount.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="cardNumber">Card Number</Label>
-                      <Input
-                        id="cardNumber"
-                        placeholder="1234 5678 9012 3456"
-                        {...register("cardNumber")}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="expiryDate">Expiry Date</Label>
-                        <Input
-                          id="expiryDate"
-                          placeholder="MM/YY"
-                          {...register("expiryDate")}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="cvv">CVV</Label>
-                        <Input
-                          id="cvv"
-                          placeholder="123"
-                          {...register("cvv")}
-                        />
-                      </div>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full"
-                      size="lg"
-                    >
-                      {isLoading ? "Processing..." : "Add Money"}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="agent" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Agent Deposit</CardTitle>
-                  <CardDescription>
-                    Visit a nearby agent to add money to your account
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="amount">Amount</Label>
-                      <Input
-                        id="amount"
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        {...register("amount")}
-                      />
-                      {errors.amount && (
-                        <p className="text-sm text-destructive">
-                          {errors.amount.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Select Agent</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose an agent" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {agents.map((agent) => (
-                            <SelectItem key={agent.id} value={agent.id}>
-                              <div className="flex items-center justify-between w-full">
-                                <span>{agent.name}</span>
-                                <span className="text-sm text-muted-foreground ml-2">
-                                  {agent.distance}
-                                </span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full"
-                      size="lg"
-                    >
-                      {isLoading ? "Generating Code..." : "Generate Agent Code"}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5" />
-                    Nearby Agents
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Deposit Form */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Choose Deposit Method</CardTitle>
+                <CardDescription>
+                  Select how you'd like to add money
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <RadioGroup
+                  value={depositMethod}
+                  onValueChange={setDepositMethod}
+                >
                   <div className="space-y-3">
-                    {agents.map((agent) => (
-                      <div
-                        key={agent.id}
-                        className="flex items-center justify-between p-3 border rounded-lg"
-                      >
-                        <div>
-                          <h4 className="font-medium">{agent.name}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            {agent.distance} away
-                          </p>
+                    {depositMethods.map((method) => {
+                      const Icon = method.icon;
+                      return (
+                        <div
+                          key={method.id}
+                          className="flex items-center space-x-2"
+                        >
+                          <RadioGroupItem value={method.id} id={method.id} />
+                          <Label
+                            htmlFor={method.id}
+                            className="flex-1 cursor-pointer"
+                          >
+                            <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                              <div className="flex items-center gap-3">
+                                <Icon className="h-5 w-5 text-primary" />
+                                <div>
+                                  <p className="font-medium">{method.name}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {method.description}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-sm font-medium text-primary">
+                                  {method.fee}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {method.time}
+                                </p>
+                              </div>
+                            </div>
+                          </Label>
                         </div>
-                        <Badge variant="secondary">⭐ {agent.rating}</Badge>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
+                </RadioGroup>
+              </CardContent>
+            </Card>
 
-        <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Deposit Amount</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="amount">Amount ($)</Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder="0.00"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="text-lg"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Minimum: $10</span>
+                    <span>Maximum: $10,000</span>
+                  </div>
+                </div>
+
+                {/* Quick Amount Buttons */}
+                <div className="grid grid-cols-4 gap-2">
+                  {[50, 100, 250, 500].map((quickAmount) => (
+                    <Button
+                      key={quickAmount}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setAmount(quickAmount.toString())}
+                    >
+                      ${quickAmount}
+                    </Button>
+                  ))}
+                </div>
+
+                {selectedMethod && amount && (
+                  <div className="p-4 bg-muted/50 rounded-lg space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Deposit Amount:</span>
+                      <span className="font-medium">${amount}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Fee ({selectedMethod.fee}):</span>
+                      <span className="font-medium">
+                        {selectedMethod.fee === "Free"
+                          ? "$0.00"
+                          : `$${(
+                              parseFloat(amount) *
+                              (parseFloat(selectedMethod.fee) / 100)
+                            ).toFixed(2)}`}
+                      </span>
+                    </div>
+                    <hr className="my-2" />
+                    <div className="flex justify-between font-semibold">
+                      <span>Total:</span>
+                      <span>
+                        $
+                        {selectedMethod.fee === "Free"
+                          ? amount
+                          : (
+                              parseFloat(amount) +
+                              parseFloat(amount) *
+                                (parseFloat(selectedMethod.fee) / 100)
+                            ).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                <Button
+                  onClick={handleDeposit}
+                  className="w-full"
+                  variant="ghost"
+                  disabled={!amount || processing}
+                >
+                  {processing ? (
+                    <>
+                      <Clock className="h-4 w-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Deposit Money
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Deposits */}
           <Card>
             <CardHeader>
-              <CardTitle>Deposit Limits</CardTitle>
+              <CardTitle>Recent Deposits</CardTitle>
+              <CardDescription>Your latest deposit history</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Daily Limit
-                </span>
-                <Badge variant="secondary">$10,000</Badge>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Monthly Limit
-                </span>
-                <Badge variant="secondary">$100,000</Badge>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Available Today
-                </span>
-                <Badge variant="outline">$9,500</Badge>
+            <CardContent>
+              <div className="space-y-4">
+                {recentDeposits?.map((deposit: any) => (
+                  <div
+                    key={deposit.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-success/10 text-success rounded-full flex items-center justify-center">
+                        <Plus className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium">{deposit.method}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {deposit.date}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-success">
+                        +${deposit.amount}
+                      </p>
+                      <Badge
+                        variant={
+                          deposit.status === "completed"
+                            ? "default"
+                            : "secondary"
+                        }
+                        className="text-xs"
+                      >
+                        {deposit.status === "completed" ? (
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                        ) : (
+                          <Clock className="h-3 w-3 mr-1" />
+                        )}
+                        {deposit.status}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Deposit Fees</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-sm">Card Deposit</span>
-                <span className="text-sm font-medium">2.9% + $0.30</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Agent Deposit</span>
-                <span className="text-sm font-medium">1.5%</span>
-              </div>
-            </CardContent>
-          </Card>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
 
-export default Deposit;
+export default UserDeposit;

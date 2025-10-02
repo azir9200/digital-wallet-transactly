@@ -10,60 +10,70 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetAllUserQuery } from "@/redux/api/adminApi";
 import {
+  useCashOutMutation,
   useGetMyTransactionQuery,
-  useSendMoneyMutation,
 } from "@/redux/api/transactionApi";
-import type { TTransfer, TUser } from "@/types/transaction.type";
+import { useGetAllAgentQuery } from "@/redux/api/userApi";
 import {
   AlertCircle,
   CheckCircle,
   Clock,
   History,
+  MinusIcon,
   Search,
-  Send,
   User,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const UserSend = () => {
+const CashOut = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRecipient, setSelectedRecipient] = useState<any>(null);
-  const [loading, setloading] = useState(false);
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
-  const { data } = useGetAllUserQuery(undefined);
-  console.log(data, "data");
-  const [sendMoney] = useSendMoneyMutation();
-  const { data: Transfers } = useGetMyTransactionQuery(undefined);
-  const recentTransfers = Transfers?.data.filter(
-    (item: any) => item.type == "SEND_MONEY"
+  const [loading, setloading] = useState(false);
+  const { data } = useGetAllAgentQuery({});
+  const agent = data?.data?.filter(
+    (item: any) => item.agentstatus == "approved"
   );
-  console.log(recentTransfers);
+  const [cashOut] = useCashOutMutation();
+  const { data: Transfers } = useGetMyTransactionQuery({});
+
+  const recentTransfer = Transfers?.data.filter(
+    (item: any) => item.type == "CASH_OUT"
+  );
+  console.log(recentTransfer);
   const handleSendMoney = async () => {
-    if (!selectedRecipient || !amount) {
+    if (!selectedRecipient || !amount || parseFloat(amount) <= 0) {
+      toast.error("Please select a recipient and enter a valid amount.");
       return;
     }
-    const payload = { receiver: selectedRecipient._id, amount: amount };
+    console.log(selectedRecipient);
+
+    const payload = {
+      agentId: selectedRecipient._id,
+      amount: parseFloat(amount),
+    };
     setloading(true);
     try {
-      const res = await sendMoney(payload);
-      console.log(res);
-      if (res?.data?.success) {
-        // Reset form
-        toast.success(`${res.data.message}` || "SendMoney successful!");
+      const res = await cashOut(payload).unwrap();
+      if (res.success) {
+        toast.success(res.message || "Cash out successful!");
         setSelectedRecipient(null);
         setAmount("");
-        setNote("");
         setloading(false);
+        setNote("");
       } else {
-        toast.error("SendMoney failed!");
+        toast.error(res.message || "Cash out failed!");
         setloading(false);
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toast.error(`${err.message}`);
+      toast.error(
+        err?.data?.message || err?.message || "Something went wrong."
+      );
+    } finally {
       setloading(false);
     }
   };
@@ -75,10 +85,10 @@ const UserSend = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold bg-primary bg-clip-text text-transparent">
-              Send Money
+              Cash Out
             </h1>
             <p className="text-muted-foreground">
-              Transfer money to friends and family
+              Transfer money to Agent Number
             </p>
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -131,7 +141,7 @@ const UserSend = () => {
                 ) : (
                   <div className="space-y-2">
                     <h4 className="font-medium">Recent Recipients</h4>
-                    {data?.data?.map((recipient: TUser) => (
+                    {agent?.map((recipient: any) => (
                       <div
                         key={recipient.id}
                         className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
@@ -141,7 +151,13 @@ const UserSend = () => {
                           {recipient.avatar}
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium">{recipient.name}</p>
+                          <div className="flex gap-2">
+                            <p className="font-medium">{recipient.name},</p>
+                            <p className="font-medium">
+                              {recipient.role} Number
+                            </p>
+                          </div>
+
                           <p className="text-sm text-muted-foreground">
                             {recipient.email}
                           </p>
@@ -183,10 +199,11 @@ const UserSend = () => {
                     rows={3}
                   />
                 </div>
+
                 <Button
                   onClick={handleSendMoney}
                   className="w-full"
-                  variant="ghost"
+                  variant="default"
                   disabled={!selectedRecipient || !amount || loading}
                 >
                   {loading ? (
@@ -196,8 +213,8 @@ const UserSend = () => {
                     </>
                   ) : (
                     <>
-                      <Send className="h-4 w-4 mr-2" />
-                      SendMoney
+                      <MinusIcon className="h-4 w-4 mr-2" />
+                      CashOut
                     </>
                   )}
                 </Button>
@@ -215,7 +232,7 @@ const UserSend = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentTransfers?.map((transfer: TTransfer) => (
+                {recentTransfer?.map((transfer: any) => (
                   <div
                     key={transfer.id}
                     className="flex items-center justify-between p-4 border rounded-lg"
@@ -226,7 +243,7 @@ const UserSend = () => {
                       </div>
                       <div>
                         <p className="font-medium">{transfer.receiver?.name}</p>
-                        <p className=" font-medium text-sm">
+                        <p className=" font-medium">
                           {transfer.receiver?.email}
                         </p>
 
@@ -264,4 +281,4 @@ const UserSend = () => {
   );
 };
 
-export default UserSend;
+export default CashOut;

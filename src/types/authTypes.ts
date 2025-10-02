@@ -11,6 +11,7 @@ export interface ILogin {
   password: string;
 }
 
+
 export interface IResponse<T> {
   statusCode: number;
   success: boolean;

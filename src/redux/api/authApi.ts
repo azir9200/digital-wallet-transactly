@@ -1,4 +1,4 @@
-import { baseApi } from "@/redux/baseApi";
+import { baseApi } from "../baseApi";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -6,7 +6,21 @@ export const authApi = baseApi.injectEndpoints({
       query: (userInfo) => ({
         url: "/user/register",
         method: "POST",
-        data: userInfo,
+        body: userInfo,
+      }),
+    }),
+    updateProfile: builder.mutation({
+      query: (userInfo) => ({
+        url: "/user/profile-edit/edit",
+        method: "PATCH",
+        body: userInfo,
+      }),
+    }),
+    changePassword: builder.mutation({
+      query: (userInfo) => ({
+        url: "/user/change-password",
+        method: "PATCH",
+        body: userInfo,
       }),
     }),
 
@@ -14,14 +28,7 @@ export const authApi = baseApi.injectEndpoints({
       query: (userInfo) => ({
         url: "/auth/login",
         method: "POST",
-        data: userInfo,
-      }),
-    }),
-
-    getAllUser: builder.query({
-      query: () => ({
-        url: "/user/all-users",
-        method: "GET",
+        body: userInfo,
       }),
     }),
 
@@ -30,8 +37,9 @@ export const authApi = baseApi.injectEndpoints({
         url: "/user/user/me",
         method: "GET",
       }),
+      // providesTags: ["USER"],
     }),
-
+    //logout
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
@@ -39,20 +47,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["USER"],
     }),
-    getUserStat: builder.query({
-      query: () => ({
-        url: "/stats/user",
-        method: "GET",
-      }),
-    }),
   }),
 });
 
 export const {
   useRegisterMutation,
   useLoginMutation,
-  useGetAllUserQuery,
   useUserInfoQuery,
   useLogoutMutation,
-  useGetUserStatQuery,
+  useUpdateProfileMutation,
+  useChangePasswordMutation,
 } = authApi;

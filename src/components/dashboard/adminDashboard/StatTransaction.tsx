@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useGetTransactionStatQuery } from "@/redux/api/transactionApi";
+// import { useGetTransactionStatQuery } from "@/redux/api/transactionApi";
 import { Download, Loader2 } from "lucide-react";
 import {
   Table,
@@ -14,33 +14,33 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 const StatTransactions = () => {
-  const { data, isLoading, error } = useGetTransactionStatQuery(undefined);
-  console.log("transaction stat4545", data?.data);
-  console.log("transaction stat", data);
+  // const { data, isLoading, error } = useGetTransactionStatQuery(undefined);
+  // console.log("transaction stat4545", data?.data);
+  // console.log("transaction stat", data);
 
-  const transactions = data?.data || [];
+  // const transactions = data?.data || [];
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64 text-gray-600">
-        <Loader2 className="animate-spin w-5 h-5 mr-2" />
-        <span>Loading transactions...</span>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div className="text-red-500 text-center p-4">
-        Failed to fetch transactions.
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-64 text-gray-600">
+  //       <Loader2 className="animate-spin w-5 h-5 mr-2" />
+  //       <span>Loading transactions...</span>
+  //     </div>
+  //   );
+  // }
+  // if (error) {
+  //   return (
+  //     <div className="text-red-500 text-center p-4">
+  //       Failed to fetch transactions.
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">
-          Transaction Management == {transactions.totalTransaction}
+          Transaction Management == transactions.totalTransaction
         </h1>
         <Button>
           <Download className="h-4 w-4 mr-2" />
@@ -51,7 +51,7 @@ const StatTransactions = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardContent className="p-6">
-            <div className="text-2xl font-bold">{transactions.length}</div>
+            <div className="text-2xl font-bold">transactions.length</div>
             <p className="text-muted-foreground">Total Stat</p>
           </CardContent>
         </Card>
@@ -96,8 +96,8 @@ const StatTransactions = () => {
               <TableHead>Date</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {transactions.length > 0 ? (
+          {/* <TableBody>
+            transactions.length > 0 ? (
               transactions.map((txn: any, index: number) => (
                 <TableRow key={txn._id} className="hover:bg-gray-50">
                   <TableCell>{index + 1}</TableCell>
@@ -128,7 +128,7 @@ const StatTransactions = () => {
                 </TableCell>
               </TableRow>
             )}
-          </TableBody>
+          </TableBody> */}
         </Table>
       </div>
     </div>

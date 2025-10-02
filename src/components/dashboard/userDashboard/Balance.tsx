@@ -1,16 +1,12 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Wallet } from "lucide-react";
-import { useUserInfoQuery } from "@/redux/api/authApi";
 import { motion } from "framer-motion";
-import WalletCard from "./WalletCard";
+import { useGeMEWalletQuery } from "@/redux/api/userApi";
 
 const Balance = () => {
-  const { data, isLoading, error } = useUserInfoQuery(undefined);
-  const user = data?.data?.user;
-  console.log("balance user", user);
-  const wallet = data?.data?.wallet;
-  console.log("balance wallet", wallet);
+  const { data, isLoading, error } = useGeMEWalletQuery(undefined);
+  // const { data: trans } = useGetMyTransactionQuery(undefined);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -27,55 +23,49 @@ const Balance = () => {
 
   return (
     <div className="">
-      <div className="flex justify-center items-center min-h-screen p-6">
+      <div className="flex justify-center items-center min-h-screen ">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-lg"
         >
-          <Card className="p-6 rounded-2xl shadow-md">
-            <CardContent className="space-y-6">
-              {/* User Info */}
-              <div className="flex items-center gap-4">
-                <Avatar className="w-14 h-14">
-                  <AvatarFallback>
-                    {user?.name?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+          <Card className="bg-gradient-to-br from-primary via-primary to-accent text-white overflow-hidden relative">
+            <CardHeader className="relative">
+              <CardTitle className="flex items-center space-x-2">
+                <Wallet className="w-6 h-6" />
+                <span>My Wallet</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="relative">
+              <div className="space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold">{user?.name}</h2>
-                  <p className="text-sm text-gray-500">{user?.email}</p>
-                  <p className="text-xs text-gray-400">Role: {user?.role}</p>
+                  <p className="text-white/80 text-sm">Available Balance</p>
+                  <p className="text-3xl font-bold">{`${data?.data?.balance}`}</p>
                 </div>
-              </div>
-
-              {/* Wallet Info */}
-              <div className="flex items-center justify-between bg-gray-100 p-4 rounded-xl">
-                <div className="flex items-center gap-3">
-                  <Wallet className="w-6 h-6 text-gray-600" />
-                  <span className="font-medium">Wallet Balance</span>
-                </div>
-                <span className="text-lg font-bold text-green-600">
-                  ${wallet?.balance?.toFixed(2) ?? "0.00"}
-                </span>
-              </div>
-
-              {/* Extra Info */}
-              <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-gray-400">User ID</p>
-                  <p className="font-medium break-all">{user?._id}</p>
-                </div>
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-gray-400">Wallet ID</p>
-                  <p className="font-medium break-all">{wallet?._id}</p>
+                <div className="flex items-center justify-between pt-4 border-t border-white/20">
+                  <div>
+                    <p className="text-white/80 text-xs">Daily Limit</p>
+                    <p className="text-sm font-medium">
+                      ${`${data?.data?.dailyLimit}`}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-white/80 text-xs">Monthly Limit</p>
+                    <p className="text-sm font-medium">
+                      ${`${data?.data?.monthlyLimit}`}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-white/80 text-xs">Status</p>
+                    <p className="text-sm font-medium capitalize">{"Active"}</p>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
         </motion.div>
       </div>
-      <WalletCard />
+      {/* <WalletCard /> */}
     </div>
   );
 };
