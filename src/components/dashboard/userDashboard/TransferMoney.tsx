@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { useTransferMutation } from "@/redux/api/transactionApi";
 
 const TransferMoney = () => {
   const [receiverId, setReceiverId] = useState("");
@@ -9,17 +8,13 @@ const TransferMoney = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const [transferMoney, { isLoading }] = useTransferMutation();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
     const numericAmount = parseFloat(amount);
-    const numericFee = fee ? parseFloat(fee) : 0;
 
-    // Basic validation
     if (!receiverId) return setError("Receiver ID is required.");
     if (isNaN(numericAmount) || numericAmount <= 0)
       return setError("Enter a valid amount greater than 0.");
@@ -27,21 +22,6 @@ const TransferMoney = () => {
       return setError("Amount can have up to 2 decimal places.");
     if (fee && !/^\d+(\.\d{1,2})?$/.test(fee))
       return setError("Fee can have up to 2 decimal places.");
-
-    try {
-      await transferMoney({
-        receiver: receiverId,
-        amount: numericAmount,
-        fee: numericFee,
-        type: "TRANSFER",
-      }).unwrap();
-      setSuccess("Transfer successful!");
-      setReceiverId("");
-      setAmount("");
-      setFee("");
-    } catch (err: any) {
-      setError(err?.data?.message || "Transfer failed. Try again.");
-    }
   };
 
   return (
@@ -87,11 +67,8 @@ const TransferMoney = () => {
 
         <button
           type="submit"
-          disabled={isLoading}
           className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
-        >
-          {isLoading ? "Transferring..." : "Transfer"}
-        </button>
+        ></button>
       </form>
     </div>
   );

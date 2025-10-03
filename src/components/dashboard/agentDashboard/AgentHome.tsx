@@ -1,107 +1,86 @@
-import {
-  DollarSign,
-  TrendingUp,
-  Users,
-  Activity,
-  ArrowUpDown,
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  CreditCard,
-  BarChart3,
-  UserCheck,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-// import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetMyTransactionQuery } from "@/redux/api/transactionApi";
+import { useGeMEWalletQuery } from "@/redux/api/userApi";
+import {
+  ArrowUpRight,
+  DollarSign,
+  Minus,
+  Plus,
+  Star,
+  TrendingDown,
+  TrendingUp,
+  UserCheck,
+  Users,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
-interface AgentTransaction {
-  id: string;
-  type: "cash_in" | "cash_out";
-  amount: number;
-  customer: string;
-  commission: number;
-  status: "completed" | "pending";
-  date: string;
-  reference: string;
-}
-
-const mockAgentTransactions: AgentTransaction[] = [
-  {
-    id: "1",
-    type: "cash_in",
-    amount: 500.0,
-    customer: "John Doe",
-    commission: 5.0,
-    status: "completed",
-    date: "2024-01-20",
-    reference: "CI001",
-  },
-  {
-    id: "2",
-    type: "cash_out",
-    amount: 250.0,
-    customer: "Jane Smith",
-    commission: 2.5,
-    status: "completed",
-    date: "2024-01-19",
-    reference: "CO001",
-  },
-  {
-    id: "3",
-    type: "cash_in",
-    amount: 1000.0,
-    customer: "Mike Johnson",
-    commission: 10.0,
-    status: "pending",
-    date: "2024-01-18",
-    reference: "CI002",
-  },
-];
-
-const AgentHome = () => {
-  //   const { user } = useAuth();
-
-  const totalCommission = mockAgentTransactions
-    .filter((t) => t.status === "completed")
-    .reduce((sum, t) => sum + t.commission, 0);
-
-  const todayTransactions = mockAgentTransactions.filter(
-    (t) => t.date === "2024-01-20"
-  ).length;
-
-  const totalVolume = mockAgentTransactions
-    .filter((t) => t.status === "completed")
-    .reduce((sum, t) => sum + t.amount, 0);
+const AgentDashboard = () => {
+  const { data } = useGeMEWalletQuery(undefined);
+  console.log(data);
+  const quickActions = [
+    {
+      title: "Cash In",
+      description: "Add money to user wallet",
+      icon: Plus,
+      href: "/agent/cash-in",
+      color: "bg-success text-success-foreground",
+    },
+    {
+      title: "Cash Out",
+      description: "Withdraw from user wallet",
+      icon: Minus,
+      href: "/agent/cash-out",
+      color: "bg-warning text-warning-foreground",
+    },
+    {
+      title: "My Customers",
+      description: "View customer list",
+      icon: Users,
+      href: "/agent/customers",
+      color: "bg-primary text-primary-foreground",
+    },
+    {
+      title: "Commissions",
+      description: "View earnings",
+      icon: DollarSign,
+      href: "/agent/commissions",
+      color: "bg-accent text-accent-foreground",
+    },
+  ];
+  const { data: trans } = useGetMyTransactionQuery(undefined);
+  // Mock agent transactions (cash-in/out)
+  const agentTransactions = trans?.data?.slice(0, 5);
+  console.log(agentTransactions);
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
-      case "cash_in":
-        return <ArrowDownToLine className="h-4 w-4 text-green-500" />;
-      case "cash_out":
-        return <ArrowUpFromLine className="h-4 w-4 text-orange-500" />;
+      case "CASH_IN":
+        return <TrendingUp className="w-4 h-4 text-success" />;
+      case "CASH_OUT":
+        return <TrendingDown className="w-4 h-4 text-warning" />;
       default:
-        return <ArrowUpDown className="h-4 w-4" />;
+        return <ArrowUpRight className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed":
+      case "COMPLETED":
         return (
-          <Badge variant="default" className="bg-green-100 text-green-800">
+          <Badge className="bg-success text-success-foreground">
             Completed
           </Badge>
         );
-      case "pending":
-        return <Badge variant="secondary">Pending</Badge>;
+      case "PENDING":
+        return (
+          <Badge variant="outline" className="border-warning text-warning">
+            Pending
+          </Badge>
+        );
+      case "FAILED":
+        return <Badge variant="destructive">Failed</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -109,193 +88,188 @@ const AgentHome = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Agent Dashboard</h1>
-        <p className="text-muted-foreground">
-          Manage cash-in/out operations and track your performance
-        </p>
+      {/* Welcome Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">
+            Hello Agent {`${data?.data.ownerId.name}`}!
+          </h2>
+          <p className="text-muted-foreground">
+            Manage your cash-in/out services and track your earnings.
+          </p>
+        </div>
+        <div className="mt-4 sm:mt-0 flex items-center space-x-2">
+          <div className="text-sm text-muted-foreground">
+            Status:{" "}
+            {data?.data.agentstatus == "approved" ? (
+              <Badge className="bg-success text-success-foreground">
+                Approved
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="border-warning text-warning">
+                Pending
+              </Badge>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Commission
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ${totalCommission.toFixed(2)}
+      {/* Commission Overview Card */}
+      <Card className="bg-gradient-to-br from-primary via-primary to-accent text-white overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+        <CardHeader className="relative">
+          <CardTitle className="flex items-center space-x-2">
+            <DollarSign className="w-6 h-6" />
+            <span>Commission Earnings</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="relative">
+          <div className="space-y-4">
+            <div>
+              <p className="text-white/80 text-sm">Total Amount</p>
+              <p className="text-3xl font-bold">${data?.data.balance}</p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              +12% from last month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Today's Transactions
-            </CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{todayTransactions}</div>
-            <p className="text-xs text-muted-foreground">+2 from yesterday</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Volume</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${totalVolume.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">+8% from last week</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Customers
-            </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">156</div>
-            <p className="text-xs text-muted-foreground">+3 new this week</p>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="flex items-center justify-between pt-4 border-t border-white/20">
+              <div>
+                <p className="text-white/80 text-xs">This Month</p>
+                <p className="text-sm font-medium">
+                  ${data?.data.monthlyLimit}
+                </p>
+              </div>
+              <div>
+                <p className="text-white/80 text-xs">Commission Rate</p>
+                <p className="text-sm font-medium">{0}%</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link to="/agent/cashOperations">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <CreditCard className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Cash Operations</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Manage cash in/out
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link to="/agent/transaction">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <Activity className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Transactions</h3>
-                  <p className="text-sm text-muted-foreground">
-                    View transaction history
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link to="/agent/customers">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-green-100 p-3 rounded-full">
-                  <UserCheck className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Customers</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Manage customers
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link to="/agent/commission">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-purple-100 p-3 rounded-full">
-                  <BarChart3 className="h-6 w-6 text-purple-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Commission</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Track earnings
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      </div>
-
-      {/* Recent Activity */}
-      <Card>
+      <Card className="card-gradient">
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Recent Activity</CardTitle>
-              <CardDescription>
-                Your latest cash-in/out operations
-              </CardDescription>
-            </div>
-            <Link to="/agent/transaction">
-              <Button variant="outline" size="sm">
-                View All
-              </Button>
-            </Link>
+          <CardTitle>Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((action, index) => {
+              const IconComponent = action.icon;
+              return (
+                <Link key={index} to={action.href}>
+                  <Button
+                    variant="outline"
+                    className="h-20 w-full flex flex-col items-center space-y-2 hover:shadow-card transition-all duration-200 hover:scale-105"
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${action.color}`}
+                    >
+                      <IconComponent className="w-4 h-4" />
+                    </div>
+                    <div className="text-center">
+                      <p className="font-medium text-sm">{action.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {action.description}
+                      </p>
+                    </div>
+                  </Button>
+                </Link>
+              );
+            })}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Recent Activities */}
+      <Card className="card-gradient">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Recent Activities</CardTitle>
+          <Link to="/agent/transactions">
+            <Button variant="outline" size="sm">
+              View All
+            </Button>
+          </Link>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockAgentTransactions.slice(0, 5).map((transaction) => (
+            {agentTransactions?.map((transaction: any, index: any) => (
               <div
-                key={transaction.id}
-                className="flex items-center justify-between"
+                key={index}
+                className="flex items-center justify-between p-4 bg-muted/30 rounded-lg"
               >
                 <div className="flex items-center space-x-4">
-                  {getTransactionIcon(transaction.type)}
+                  <div className="w-10 h-10 bg-card rounded-lg flex items-center justify-center">
+                    {getTransactionIcon(transaction.type)}
+                  </div>
                   <div>
-                    <p className="font-medium">
-                      {transaction.type === "cash_in" ? "Cash In" : "Cash Out"}{" "}
-                      - {transaction.customer}
+                    <p className="font-medium text-foreground">
+                      {transaction.type
+                        .replace("_", " ")
+                        .toLowerCase()
+                        .replace(/\b\w/g, (l: string) => l.toUpperCase())}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {transaction.date} • {transaction.reference}
+                      Customer: {transaction.customerName} •{" "}
+                      {new Date(transaction.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    ${transaction.amount.toFixed(2)}
-                  </p>
-                  <p className="text-sm text-green-600">
-                    Commission: ${transaction.commission.toFixed(2)}
-                  </p>
+                <div className="text-right flex items-center space-x-3">
+                  <div>
+                    <p className="font-semibold text-foreground">
+                      ${transaction.amount.toFixed(2)}
+                    </p>
+                    <p className="text-xs text-success">
+                      Commission: +${transaction.commission?.toFixed(2)}
+                    </p>
+                  </div>
                   {getStatusBadge(transaction.status)}
                 </div>
               </div>
             ))}
+
+            {agentTransactions?.length === 0 && (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <UserCheck className="w-8 h-8 text-muted-foreground" />
+                </div>
+                <p className="text-muted-foreground">No recent activities</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Start helping customers with cash-in and cash-out services
+                </p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Agent Tips */}
+      <Card className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Star className="w-5 h-5 text-primary" />
+            <span>Agent Tips</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <h4 className="font-semibold text-foreground">
+                Maximize Your Earnings
+              </h4>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Provide excellent customer service</li>
+                <li>• Maintain adequate cash inventory</li>
+                <li>• Keep your location updated</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-semibold text-foreground">Stay Compliant</h4>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Verify customer identity for large transactions</li>
+                <li>• Report suspicious activities</li>
+                <li>• Keep transaction records updated</li>
+              </ul>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -303,4 +277,4 @@ const AgentHome = () => {
   );
 };
 
-export default AgentHome;
+export default AgentDashboard;

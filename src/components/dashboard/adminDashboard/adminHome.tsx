@@ -1,308 +1,253 @@
-import {
-  Users,
-  UserCheck,
-  ArrowUpDown,
-  DollarSign,
-  AlertCircle,
-  Activity,
-  Shield,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetChatQuery, useGetStatsQuery } from "@/redux/api/adminApi";
+import {
+  CheckCircle,
+  Clock,
+  DollarSign,
+  Settings,
+  Shield,
+  TrendingUp,
+  UserCheck,
+  Users,
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import { useUserInfoQuery } from "@/redux/api/authApi";
-import { mockRecentActivity, mockStats } from "./data/mockRecentActivity";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-const AdminHome = () => {
-  const { data } = useUserInfoQuery(undefined);
-  const user = data?.data;
-  console.log(user);
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case "user_registration":
-        return <Users className="h-4 w-4 text-blue-500" />;
-      case "agent_approval":
-        return <UserCheck className="h-4 w-4 text-green-500" />;
-      case "large_transaction":
-        return <AlertCircle className="h-4 w-4 text-orange-500" />;
-      case "system_alert":
-        return <Shield className="h-4 w-4 text-purple-500" />;
-      default:
-        return <Activity className="h-4 w-4" />;
-    }
-  };
-
-  const getActivityBadge = (status: string) => {
-    switch (status) {
-      case "success":
-        return (
-          <Badge variant="default" className="bg-green-100 text-green-800">
-            Success
-          </Badge>
-        );
-      case "warning":
-        return (
-          <Badge variant="secondary" className="bg-orange-100 text-orange-800">
-            Warning
-          </Badge>
-        );
-      case "info":
-        return <Badge variant="outline">Info</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
-    }
-  };
-
+const AdminDashboard = () => {
+  const quickActions = [
+    {
+      title: "Manage Users",
+      description: "View & manage user accounts",
+      icon: Users,
+      href: "/admin/users",
+      color: "bg-primary text-primary-foreground",
+    },
+    {
+      title: "Manage Agents",
+      description: "Approve & manage agents",
+      icon: UserCheck,
+      href: "/admin/agents",
+      color: "bg-success text-success-foreground",
+    },
+    {
+      title: "System Settings",
+      description: "Configure system parameters",
+      icon: Settings,
+      href: "/admin/settings",
+      color: "bg-warning text-warning-foreground",
+    },
+    {
+      title: "Security Center",
+      description: "Monitor security events",
+      icon: Shield,
+      href: "/admin/security",
+      color: "bg-destructive text-destructive-foreground",
+    },
+  ];
+  const { data } = useGetChatQuery(undefined);
+  const { data: stats } = useGetStatsQuery(undefined);
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-muted-foreground">
-          Monitor system performance and manage platform operations
-        </p>
+      {/* Welcome Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">
+            Admin Dashboard
+          </h2>
+          <p className="text-muted-foreground">
+            Monitor and manage the PayWallet platform.
+          </p>
+        </div>
+        <div className="mt-4 sm:mt-0">
+          <div className="flex items-center space-x-4">
+            <div className="text-right">
+              <p className="text-sm font-medium text-foreground">
+                System Status
+              </p>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-success rounded-full"></div>
+                <span className="text-xs text-success">
+                  All Systems Operational
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Stats Overview */}
+      {/* Main Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {mockStats.totalUsers.toLocaleString()}
+        <Card className="bg-gradient-to-br from-primary via-primary to-primary/80 text-white">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white/80 text-sm">Total Users</p>
+                <p className="text-2xl font-bold">{stats?.data.totalUsers}</p>
+              </div>
+              <Users className="w-8 h-8 text-white/80" />
             </div>
-            <p className="text-xs text-muted-foreground">
-              +12% from last month
-            </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Agents</CardTitle>
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{mockStats.totalAgents}</div>
-            <p className="text-xs text-muted-foreground">+3 new this week</p>
+        <Card className="bg-gradient-to-br from-secondary via-secondary to-secondary/80 text-white">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white/80 text-sm">Active Agents</p>
+                <p className="text-2xl font-bold">{stats?.data.totalAgents}</p>
+              </div>
+              <UserCheck className="w-8 h-8 text-white/80" />
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Transactions
-            </CardTitle>
-            <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {mockStats.totalTransactions.toLocaleString()}
+        <Card className="bg-gradient-to-br from-primary/80 via-secondary to-secondary/80 text-white">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white/80 text-sm">Transactions</p>
+                <p className="text-2xl font-bold">
+                  {stats?.data.totalTransactions}
+                </p>
+              </div>
+              <TrendingUp className="w-8 h-8 text-white/80" />
             </div>
-            <p className="text-xs text-muted-foreground">+8% from last week</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Transaction Volume
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ${(mockStats.totalVolume / 1000000).toFixed(1)}M
+        <Card className="bg-gradient-to-br from-secondary/80 via-secondary to-primary/80 text-white">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white/80 text-sm">Total Volume</p>
+                <p className="text-2xl font-bold">
+                  ${(stats?.data.totalVolume / 1000000).toFixed(1)}M
+                </p>
+              </div>
+              <DollarSign className="w-8 h-8 text-white/80" />
             </div>
-            <p className="text-xs text-muted-foreground">
-              +15% from last month
-            </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* System Health */}
+      {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="card-gradient">
           <CardHeader>
-            <CardTitle>System Health</CardTitle>
-            <CardDescription>
-              Current system performance metrics
-            </CardDescription>
+            <CardTitle>Transaction Volume</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Active Users</span>
-                <span className="text-sm text-muted-foreground">
-                  {mockStats.activeUsers}/{mockStats.totalUsers}
-                </span>
-              </div>
-              <Progress
-                value={(mockStats.activeUsers / mockStats.totalUsers) * 100}
-              />
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Server Uptime</span>
-                <span className="text-sm text-muted-foreground">99.9%</span>
-              </div>
-              <Progress value={99.9} />
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">
-                  Transaction Success Rate
-                </span>
-                <span className="text-sm text-muted-foreground">98.7%</span>
-              </div>
-              <Progress value={98.7} />
-            </div>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={data?.data?.transactionVolume}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="volume"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={3}
+                  dot={{ fill: "hsl(var(--primary))" }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="card-gradient">
           <CardHeader>
-            <CardTitle>Pending Actions</CardTitle>
-            <CardDescription>Items requiring admin attention</CardDescription>
+            <CardTitle>User Growth</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-orange-100 p-2 rounded-full">
-                    <UserCheck className="h-4 w-4 text-orange-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Agent Approvals</p>
-                    <p className="text-sm text-muted-foreground">
-                      {mockStats.pendingApprovals} pending
-                    </p>
-                  </div>
-                </div>
-                <Link to="/dashboard/agents">
-                  <Button size="sm" variant="outline">
-                    Review
-                  </Button>
-                </Link>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-red-100 p-2 rounded-full">
-                    <AlertCircle className="h-4 w-4 text-red-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Disputed Transactions</p>
-                    <p className="text-sm text-muted-foreground">3 pending</p>
-                  </div>
-                </div>
-                <Link to="/dashboard/transactions">
-                  <Button size="sm" variant="outline">
-                    Review
-                  </Button>
-                </Link>
-              </div>
-            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={data?.data.userGrowth}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="users" fill="hsl(var(--primary))" />
+                <Bar dataKey="agents" fill="hsl(var(--success))" />
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Link to="/admin/users">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <Users className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Manage Users</h3>
-                  <p className="text-sm text-muted-foreground">
-                    View and manage user accounts
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link to="/admin/agent">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-green-100 p-3 rounded-full">
-                  <UserCheck className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Manage Agents</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Approve and monitor agents
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link to="setting">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="bg-purple-100 p-3 rounded-full">
-                  <Shield className="h-6 w-6 text-purple-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">System Settings</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Configure platform settings
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      </div>
-
-      {/* Recent Activity */}
-      <Card>
+      <Card className="card-gradient">
         <CardHeader>
-          <CardTitle>Recent System Activity</CardTitle>
-          <CardDescription>
-            Latest platform events and notifications
-          </CardDescription>
+          <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {mockRecentActivity.map((activity) => (
-              <div
-                key={activity.id}
-                className="flex items-center justify-between"
-              >
-                <div className="flex items-center space-x-4">
-                  {getActivityIcon(activity.type)}
-                  <div>
-                    <p className="font-medium">{activity.description}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {activity.timestamp}
-                    </p>
-                  </div>
-                </div>
-                {getActivityBadge(activity.status)}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((action, index) => {
+              const IconComponent = action.icon;
+              return (
+                <Link key={index} to={action.href}>
+                  <Button
+                    variant="outline"
+                    className="h-20 w-full flex flex-col items-center space-y-2 hover:shadow-card transition-all duration-200 hover:scale-105"
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${action.color}`}
+                    >
+                      <IconComponent className="w-4 h-4" />
+                    </div>
+                    <div className="text-center">
+                      <p className="font-medium text-sm">{action.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {action.description}
+                      </p>
+                    </div>
+                  </Button>
+                </Link>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="card-gradient">
+        <CardHeader>
+          <CardTitle>System Status</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                <CheckCircle className="w-8 h-8 text-success" />
               </div>
-            ))}
+              <h3 className="font-semibold text-foreground">API Services</h3>
+              <p className="text-sm text-success">Operational</p>
+              <p className="text-xs text-muted-foreground">99.9% uptime</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                <CheckCircle className="w-8 h-8 text-success" />
+              </div>
+              <h3 className="font-semibold text-foreground">Database</h3>
+              <p className="text-sm text-success">Operational</p>
+              <p className="text-xs text-muted-foreground">Response: 45ms</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-warning/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Clock className="w-8 h-8 text-warning" />
+              </div>
+              <h3 className="font-semibold text-foreground">Payment Gateway</h3>
+              <p className="text-sm text-warning">Degraded</p>
+              <p className="text-xs text-muted-foreground">Investigating...</p>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -310,4 +255,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default AdminDashboard;

@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/dialog";
 import { mockTransactions } from "./data/mockTransactions";
 
-
 const TransactionHistory = () => {
   const [transactions] = useState(mockTransactions);
   const [searchTerm, setSearchTerm] = useState("");
@@ -174,9 +173,7 @@ const TransactionHistory = () => {
                   <TableRow key={transaction.id}>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <span className="text-lg">
-                          {getTransactionIcon()}
-                        </span>
+                        <span className="text-lg">{getTransactionIcon()}</span>
                         <span className="font-medium">
                           {transaction.type.replace("_", " ")}
                         </span>

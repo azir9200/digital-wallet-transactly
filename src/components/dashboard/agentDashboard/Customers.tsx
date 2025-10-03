@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Search, User, Eye, Phone, Mail, Wallet } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,9 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -18,15 +16,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogDescription,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
+import { Eye, Mail, Search, User, Wallet } from "lucide-react";
+import { useState } from "react";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useGetAllWalletQuery } from "@/redux/api/agentApi";
 import {
   Dialog,
   DialogContent,
@@ -34,88 +28,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@radix-ui/react-dialog";
-import { AlertDialogHeader } from "@/components/ui/alert-dialog";
-
-interface Customer {
-  id: string;
-  name: string;
-  phone: string;
-  email: string;
-  balance: number;
-  totalTransactions: number;
-  lastTransactionDate: string;
-  isActive: boolean;
-  joinDate: string;
-}
-
-const mockCustomers: Customer[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    phone: "+1234567890",
-    email: "john@example.com",
-    balance: 250.0,
-    totalTransactions: 15,
-    lastTransactionDate: "2024-01-20",
-    isActive: true,
-    joinDate: "2023-12-01",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    phone: "+1234567891",
-    email: "jane@example.com",
-    balance: 150.75,
-    totalTransactions: 8,
-    lastTransactionDate: "2024-01-19",
-    isActive: true,
-    joinDate: "2023-11-15",
-  },
-  {
-    id: "3",
-    name: "Mike Johnson",
-    phone: "+1234567892",
-    email: "mike@example.com",
-    balance: 500.0,
-    totalTransactions: 22,
-    lastTransactionDate: "2024-01-18",
-    isActive: true,
-    joinDate: "2023-10-20",
-  },
-  {
-    id: "4",
-    name: "Sarah Wilson",
-    phone: "+1234567893",
-    email: "sarah@example.com",
-    balance: 75.25,
-    totalTransactions: 5,
-    lastTransactionDate: "2024-01-15",
-    isActive: false,
-    joinDate: "2024-01-01",
-  },
-];
 
 const Customers = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
-    null
-  );
-
-  const filteredCustomers = mockCustomers.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const [selectedCustomer, setSelectedCustomer] = useState<any | null>(null);
+  const { data } = useGetAllWalletQuery(undefined);
+  const mockCustomers = data?.data;
+  console.log(mockCustomers);
+  const filteredCustomers = mockCustomers?.filter(
+    (customer: any) =>
+      customer.ownerId.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.phone.includes(searchTerm) ||
       customer.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalCustomers = filteredCustomers.length;
-  const activeCustomers = filteredCustomers.filter((c) => c.isActive).length;
-  const totalBalance = filteredCustomers.reduce((sum, c) => sum + c.balance, 0);
+  const totalCustomers = filteredCustomers?.length;
+  const activeCustomers = filteredCustomers?.filter(
+    (c: any) => c.status !== "ACTIVE"
+  ).length;
+  const totalBalance = filteredCustomers?.reduce(
+    (sum: any, c: any) => sum + c.balance,
+    0
+  );
 
   const getInitials = (name: string) => {
     return name
-      .split(" ")
-      .map((n) => n[0])
+      ?.split(" ")
+      ?.map((n) => n[0])
       .join("")
       .toUpperCase();
   };
@@ -171,7 +110,9 @@ const Customers = () => {
                 <p className="text-sm font-medium text-muted-foreground">
                   Total Balance
                 </p>
-                <p className="text-2xl font-bold">${totalBalance.toFixed(2)}</p>
+                <p className="text-2xl font-bold">
+                  ${totalBalance?.toFixed(2)}
+                </p>
               </div>
               <Wallet className="h-8 w-8 text-muted-foreground" />
             </div>
@@ -205,7 +146,7 @@ const Customers = () => {
         <CardHeader>
           <CardTitle>Customers</CardTitle>
           <CardDescription>
-            {filteredCustomers.length} customer(s) found
+            {filteredCustomers?.length} customer(s) found
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -215,26 +156,24 @@ const Customers = () => {
                 <TableHead>Customer</TableHead>
                 <TableHead>Contact</TableHead>
                 <TableHead>Balance</TableHead>
-                <TableHead>Transactions</TableHead>
-                <TableHead>Last Activity</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCustomers.map((customer) => (
+              {filteredCustomers?.map((customer: any) => (
                 <TableRow key={customer.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback className="bg-primary/10 text-primary">
-                          {getInitials(customer.name)}
+                          {getInitials(customer?.ownerId?.name)}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium">{customer.name}</p>
+                        <p className="font-medium">{customer?.ownerId?.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          Joined {customer.joinDate}
+                          Joined {customer?.ownerId?.createdAt}
                         </p>
                       </div>
                     </div>
@@ -242,12 +181,8 @@ const Customers = () => {
                   <TableCell>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-sm">
-                        <Phone className="h-3 w-3" />
-                        {customer.phone}
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
                         <Mail className="h-3 w-3" />
-                        {customer.email}
+                        {customer?.ownerId?.email}
                       </div>
                     </div>
                   </TableCell>
@@ -258,21 +193,18 @@ const Customers = () => {
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="text-center">
-                      <p className="font-medium">
-                        {customer.totalTransactions}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <p className="text-sm">{customer.lastTransactionDate}</p>
-                  </TableCell>
+
                   <TableCell>
                     <Badge
-                      variant={customer.isActive ? "default" : "secondary"}
+                      variant={
+                        customer.ownerId.status == "ACTIVE"
+                          ? "default"
+                          : "secondary"
+                      }
                     >
-                      {customer.isActive ? "Active" : "Inactive"}
+                      {customer.ownerId.status == "ACTIVE"
+                        ? "Active"
+                        : "Inactive"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -307,12 +239,12 @@ const Customers = () => {
                                 </h3>
                                 <Badge
                                   variant={
-                                    selectedCustomer.isActive
+                                    customer.ownerId.status == "ACTIVE"
                                       ? "default"
                                       : "secondary"
                                   }
                                 >
-                                  {selectedCustomer.isActive
+                                  {customer.ownerId.status == "ACTIVE"
                                     ? "Active"
                                     : "Inactive"}
                                 </Badge>
@@ -322,18 +254,10 @@ const Customers = () => {
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-2">
                                 <p className="text-sm font-medium text-muted-foreground">
-                                  Phone
-                                </p>
-                                <p className="text-sm">
-                                  {selectedCustomer.phone}
-                                </p>
-                              </div>
-                              <div className="space-y-2">
-                                <p className="text-sm font-medium text-muted-foreground">
                                   Email
                                 </p>
                                 <p className="text-sm">
-                                  {selectedCustomer.email}
+                                  {selectedCustomer?.ownerId?.email}
                                 </p>
                               </div>
                               <div className="space-y-2">
@@ -342,30 +266,6 @@ const Customers = () => {
                                 </p>
                                 <p className="text-sm font-medium">
                                   ${selectedCustomer.balance.toFixed(2)}
-                                </p>
-                              </div>
-                              <div className="space-y-2">
-                                <p className="text-sm font-medium text-muted-foreground">
-                                  Total Transactions
-                                </p>
-                                <p className="text-sm">
-                                  {selectedCustomer.totalTransactions}
-                                </p>
-                              </div>
-                              <div className="space-y-2">
-                                <p className="text-sm font-medium text-muted-foreground">
-                                  Join Date
-                                </p>
-                                <p className="text-sm">
-                                  {selectedCustomer.joinDate}
-                                </p>
-                              </div>
-                              <div className="space-y-2">
-                                <p className="text-sm font-medium text-muted-foreground">
-                                  Last Activity
-                                </p>
-                                <p className="text-sm">
-                                  {selectedCustomer.lastTransactionDate}
                                 </p>
                               </div>
                             </div>

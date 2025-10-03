@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Filter, Download, Eye, Search } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -17,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -26,91 +24,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Download, Filter, Search } from "lucide-react";
+import { useState } from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@radix-ui/react-dialog";
-import { AlertDialogHeader } from "@/components/ui/alert-dialog";
-
-interface Transaction {
-  id: string;
-  type: "cash_in" | "cash_out" | "transfer" | "withdrawal";
-  customer: string;
-  amount: number;
-  fee: number;
-  commission: number;
-  status: "completed" | "pending" | "failed";
-  date: string;
-  time: string;
-  reference: string;
-}
-
-const mockTransactions: Transaction[] = [
-  {
-    id: "1",
-    type: "cash_in",
-    customer: "John Doe",
-    amount: 500.0,
-    fee: 5.0,
-    commission: 2.5,
-    status: "completed",
-    date: "2024-01-20",
-    time: "10:30 AM",
-    reference: "TXN001",
-  },
-  {
-    id: "2",
-    type: "cash_out",
-    customer: "Jane Smith",
-    amount: 250.0,
-    fee: 2.5,
-    commission: 1.25,
-    status: "completed",
-    date: "2024-01-20",
-    time: "11:15 AM",
-    reference: "TXN002",
-  },
-  {
-    id: "3",
-    type: "cash_in",
-    customer: "Mike Johnson",
-    amount: 1000.0,
-    fee: 10.0,
-    commission: 5.0,
-    status: "pending",
-    date: "2024-01-20",
-    time: "12:00 PM",
-    reference: "TXN003",
-  },
-  {
-    id: "4",
-    type: "cash_out",
-    customer: "Sarah Wilson",
-    amount: 75.0,
-    fee: 1.5,
-    commission: 0.75,
-    status: "failed",
-    date: "2024-01-19",
-    time: "3:45 PM",
-    reference: "TXN004",
-  },
-];
+import { useGetMyTransactionQuery } from "@/redux/api/transactionApi";
 
 const Transactions = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
 
-  const filteredTransactions = mockTransactions.filter((transaction) => {
-    const matchesSearch =
-      transaction.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      transaction.reference.toLowerCase().includes(searchTerm.toLowerCase());
+  const { data } = useGetMyTransactionQuery(undefined);
+  console.log(data);
+  const filteredTransactions = data?.data?.filter((transaction: any) => {
+    const matchesSearch = transaction?.receiver?.email
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesType = typeFilter === "all" || transaction.type === typeFilter;
     const matchesStatus =
       statusFilter === "all" || transaction.status === statusFilter;
@@ -172,13 +101,13 @@ const Transactions = () => {
     }
   };
 
-  const totalAmount = filteredTransactions.reduce(
-    (sum, t) => sum + t.amount,
+  const totalAmount = filteredTransactions?.reduce(
+    (sum: any, t: any) => sum + t.amount,
     0
   );
-  const totalCommission = filteredTransactions
-    .filter((t) => t.status === "completed")
-    .reduce((sum, t) => sum + t.commission, 0);
+  // const totalCommission = filteredTransactions
+  //   .filter((t) => t.status === "completed")
+  //   .reduce((sum, t) => sum + t.commission, 0);
 
   return (
     <div className="space-y-6">
@@ -204,18 +133,18 @@ const Transactions = () => {
                 <p className="text-sm font-medium text-muted-foreground">
                   Total Volume
                 </p>
-                <p className="text-2xl font-bold">${totalAmount.toFixed(2)}</p>
+                <p className="text-2xl font-bold">${totalAmount?.toFixed(2)}</p>
               </div>
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">
-                  {filteredTransactions.length} transactions
+                  {filteredTransactions?.length} transactions
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -228,7 +157,7 @@ const Transactions = () => {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card>
           <CardContent className="p-6">
@@ -238,10 +167,10 @@ const Transactions = () => {
                   Success Rate
                 </p>
                 <p className="text-2xl font-bold">
-                  {filteredTransactions.length > 0
+                  {filteredTransactions?.length > 0
                     ? Math.round(
                         (filteredTransactions.filter(
-                          (t) => t.status === "completed"
+                          (t: any) => t.status === "completed"
                         ).length /
                           filteredTransactions.length) *
                           100
@@ -318,134 +247,35 @@ const Transactions = () => {
         <CardHeader>
           <CardTitle>Transactions</CardTitle>
           <CardDescription>
-            {filteredTransactions.length} transaction(s) found
+            {filteredTransactions?.length} transaction(s) found
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Reference</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Customer</TableHead>
                 <TableHead>Amount</TableHead>
-                <TableHead>Commission</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Date & Time</TableHead>
-                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredTransactions.map((transaction) => (
+              {filteredTransactions?.map((transaction: any) => (
                 <TableRow key={transaction.id}>
-                  <TableCell className="font-medium">
-                    {transaction.reference}
-                  </TableCell>
                   <TableCell>{getTypeBadge(transaction.type)}</TableCell>
-                  <TableCell>{transaction.customer}</TableCell>
+                  <TableCell>{transaction.receiver.email}</TableCell>
                   <TableCell>${transaction.amount.toFixed(2)}</TableCell>
-                  <TableCell className="text-green-600">
-                    ${transaction.commission.toFixed(2)}
-                  </TableCell>
+
                   <TableCell>{getStatusBadge(transaction.status)}</TableCell>
                   <TableCell>
                     <div>
                       <p className="text-sm">{transaction.date}</p>
                       <p className="text-xs text-muted-foreground">
-                        {transaction.time}
+                        {transaction.createdAt}
                       </p>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedTransaction(transaction)}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <AlertDialogHeader>
-                          <DialogTitle>Transaction Details</DialogTitle>
-                          <DialogDescription>
-                            Reference: {transaction.reference}
-                          </DialogDescription>
-                        </AlertDialogHeader>
-                        {selectedTransaction && (
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Type
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  {getTypeBadge(selectedTransaction.type)}
-                                </p>
-                              </div>
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Status
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  {getStatusBadge(selectedTransaction.status)}
-                                </p>
-                              </div>
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Customer
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  {selectedTransaction.customer}
-                                </p>
-                              </div>
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Amount
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  ${selectedTransaction.amount.toFixed(2)}
-                                </p>
-                              </div>
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Fee
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  ${selectedTransaction.fee.toFixed(2)}
-                                </p>
-                              </div>
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Commission
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  ${selectedTransaction.commission.toFixed(2)}
-                                </p>
-                              </div>
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Date
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  {selectedTransaction.date}
-                                </p>
-                              </div>
-                              <div>
-                                <Label className="text-sm font-medium">
-                                  Time
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                  {selectedTransaction.time}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </DialogContent>
-                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}

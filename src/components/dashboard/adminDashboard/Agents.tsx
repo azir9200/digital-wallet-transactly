@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import {
-  Search,
-  Plus,
-  MoreHorizontal,
-  Check,
-  X,
-  User,
-  AlertCircle,
- 
-} from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -21,23 +17,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import type { AgentStatus, Status } from "@/types/authTypes";
+import { useApprovedAgentMutation } from "@/redux/api/adminApi";
 import { useGetAgentQuery } from "@/redux/api/agentApi";
+import type { AgentStatus, Status } from "@/types/authTypes";
+import {
+  AlertCircle,
+  Check,
+  MoreHorizontal,
+  Plus,
+  Search,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+// import { AgentStatus, Status, IsActive } from '@/contexts/AuthContext';
 
 interface Agent {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   mobile?: string;
-  agentStatus: AgentStatus;
+  agentstatus: AgentStatus;
   status: Status;
   isActive?: Status;
   isVerified?: boolean;
@@ -48,15 +48,12 @@ interface Agent {
 }
 
 const Agents = () => {
-  //   const [agents, setAgents] = useState<Agent[]>(mockAgents);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { data } = useGetAgentQuery(undefined);
+  const [approvedAgent] = useApprovedAgentMutation();
   const agents = data?.data || [];
-  console.log("agent", agents.length);
-  console.log("agent", agents);
-  console.log("agent", agents?.agentstatus);
-
+  console.log(agents, "thisis");
   const pendingAgents = agents.filter((a: any) => a.agentStatus == "pending");
   console.log("pending", pendingAgents);
   const approvedAgents = agents.filter(
@@ -65,39 +62,18 @@ const Agents = () => {
   const suspendedAgents = agents.filter(
     (a: any) => a.agentStatus === "suspended"
   );
-  const handleAgentAction = (agentId: string, action: string) => {
-    agents((prev: Agent[]) =>
-      prev.map((agent: Agent) => {
-        if (agent.id === agentId) {
-          switch (action) {
-            case "approve":
-              return {
-                ...agent,
-                agentStatus: agents?.agentStatus === "approved",
-                status: agents?.status,
-                isActive: agents?.IsActive,
-              };
-            case "suspend":
-              return {
-                ...agent,
-                agentStatus: agents?.agentStatus === "suspended",
-                status: agents?.status,
-                isActive: agents?.IsActive,
-              };
-            case "pending":
-              return {
-                ...agent,
-                agentStatus: agents?.agentStatus === "pending",
-                status: agents?.status,
-                isActive: agents?.IsActive,
-              };
-            default:
-              return agent;
-          }
-        }
-        return agent;
-      })
-    );
+  const handleAgentAction = async (agentId: string, action: string) => {
+    const res = await approvedAgent({
+      id: agentId,
+      userInfo: { agentstatus: action }, // এখানে অবশ্যই agentstatus key থাকতে হবে
+    }).unwrap(); // unwrap করলে সরাসরি response পাবেন
+
+    console.log(res, "this");
+    if (res.success) {
+      toast.success(`${res.message}`);
+    } else {
+      toast.error(`${res.message}`);
+    }
   };
 
   return (
@@ -120,7 +96,7 @@ const Agents = () => {
         <Card>
           <CardContent className="p-6">
             <div className="text-2xl font-bold text-green-600">
-              approvedAgents.length
+              {approvedAgents.length}
             </div>
             <p className="text-muted-foreground">Approved</p>
           </CardContent>
@@ -128,7 +104,7 @@ const Agents = () => {
         <Card>
           <CardContent className="p-6">
             <div className="text-2xl font-bold text-yellow-600">
-              pendingAgents.length
+              {pendingAgents.length}
             </div>
             <p className="text-muted-foreground">Pending Approval</p>
           </CardContent>
@@ -136,7 +112,7 @@ const Agents = () => {
         <Card>
           <CardContent className="p-6">
             <div className="text-2xl font-bold text-red-600">
-              suspendedAgents.length
+              {suspendedAgents.length}
             </div>
             <p className="text-muted-foreground">Suspended</p>
           </CardContent>
@@ -195,27 +171,24 @@ const Agents = () => {
                 <TableHead>Email</TableHead>
                 <TableHead>Mobile</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Commission Rate</TableHead>
-                <TableHead>Total Commission</TableHead>
-                <TableHead>Transactions</TableHead>
                 <TableHead>Joined</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {agents.map((agent: Agent) => (
-                <TableRow key={agent.id}>
+                <TableRow key={agent._id}>
                   <TableCell>
                     <div className="flex items-center space-x-3">
                       <Avatar>
-                        <AvatarFallback className="bg-gradient-primary text-white">
+                        <AvatarFallback className="bg-primary text-white">
                           {agent.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <div className="font-medium">{agent.name}</div>
                         <div className="text-sm text-muted-foreground">
-                          ID: {agent.id}
+                          ID: {agent._id}
                         </div>
                       </div>
                     </div>
@@ -223,14 +196,10 @@ const Agents = () => {
                   <TableCell>{agent.email}</TableCell>
                   <TableCell>{agent.mobile || "N/A"}</TableCell>
                   <TableCell>
-                    getAgentStatusBadge (agent.agentStatus)
+                    {agent.agentstatus}
                     {/* {getAgentStatusBadge(agent.agentStatus)} */}
                   </TableCell>
-                  <TableCell>{agent.commissionRate}%</TableCell>
-                  <TableCell>
-                    ${agent.totalCommission?.toFixed(2) || "0.00"}
-                  </TableCell>
-                  <TableCell>{agent.totalTransactions || 0}</TableCell>
+
                   <TableCell>
                     {new Date(agent.createdAt).toLocaleDateString()}
                   </TableCell>
@@ -242,15 +211,11 @@ const Agents = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <User className="h-4 w-4 mr-2" />
-                          View Profile
-                        </DropdownMenuItem>
-                        {agent.agentStatus === "approved" && (
+                        {agent.agentstatus === "pending" && (
                           <>
                             <DropdownMenuItem
                               onClick={() =>
-                                handleAgentAction(agent.id, "approve")
+                                handleAgentAction(agent._id, "approved")
                               }
                               className="text-green-600"
                             >
@@ -259,7 +224,7 @@ const Agents = () => {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() =>
-                                handleAgentAction(agent.id, "reject")
+                                handleAgentAction(agent._id, "suspended")
                               }
                               className="text-red-600"
                             >
@@ -268,10 +233,10 @@ const Agents = () => {
                             </DropdownMenuItem>
                           </>
                         )}
-                        {agent.agentStatus === "approved" && (
+                        {agent.agentstatus === "approved" && (
                           <DropdownMenuItem
                             onClick={() =>
-                              handleAgentAction(agent.id, "suspend")
+                              handleAgentAction(agent._id, "suspend")
                             }
                             className="text-red-600"
                           >
@@ -279,10 +244,10 @@ const Agents = () => {
                             Suspend Agent
                           </DropdownMenuItem>
                         )}
-                        {agent.agentStatus === "suspended" && (
+                        {agent.agentstatus === "suspended" && (
                           <DropdownMenuItem
                             onClick={() =>
-                              handleAgentAction(agent.id, "approve")
+                              handleAgentAction(agent._id, "approve")
                             }
                             className="text-green-600"
                           >

@@ -9,17 +9,17 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useAppDispatch } from "@/redux/hook";
+import { getSidebarItems } from "@/utils/getSidebarItems";
+import { LogOut, User } from "lucide-react";
+import * as React from "react";
+import { NavLink } from "react-router-dom";
+import { Button } from "../ui/button";
 import {
   authApi,
   useLogoutMutation,
   useUserInfoQuery,
 } from "@/redux/api/authApi";
-import { useAppDispatch } from "@/redux/hook";
-import { getSidebarItems } from "@/utils/getSidebarItems";
-import { Home, LogOut, User } from "lucide-react";
-import * as React from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Button } from "../ui/button";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userData } = useUserInfoQuery(undefined);
@@ -32,8 +32,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    await logout(undefined);
-    dispatch(authApi.util.resetApiState());
+    try {
+      await logout(undefined);
+      // Clear all Redux state
+      dispatch(authApi.util.resetApiState());
+      // Clear localStorage to remove persisted state
+      localStorage.clear();
+      // Force redirect to login page
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Force redirect to login page even if logout API fails
+      localStorage.clear();
+      window.location.href = "/login";
+    }
   };
 
   return (
@@ -46,7 +58,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <Avatar className="h-16 w-16">
           <AvatarImage src="" />
           <AvatarFallback className="bg-primary text-primary-foreground">
-            {userData?.data?.name?.charAt(0) || <User />}
+            {userData?.data?.name?.charAt(0, 4) || <User />}
           </AvatarFallback>
         </Avatar>
         <div className="text-center">
@@ -91,17 +103,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       {/* Logout */}
       <SidebarFooter className="p-4">
-        <Button
-          variant="outline"
-          className="w-full flex items-center gap-2 text-sm hover:text-destructive"
-        >
-          <Link to="/">
-            <Home size={16} />
-          </Link>
-        </Button>
-      </SidebarFooter>
-      {/* Logout */}
-      <SidebarFooter className="">
         <Button
           onClick={handleLogout}
           variant="outline"

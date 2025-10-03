@@ -89,7 +89,7 @@ export function LoginForm({
         form.setValue("password", "123456");
         break;
       case "agent":
-        form.setValue("email", "agent1@gmail.com");
+        form.setValue("email", "agent10@gmail.com");
         form.setValue("password", "123456");
         break;
       case "user":

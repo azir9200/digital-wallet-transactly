@@ -1,8 +1,12 @@
+
 import AgentHome from "@/components/dashboard/agentDashboard/AgentHome";
 import CashOperations from "@/components/dashboard/agentDashboard/CashOperations";
 import Commission from "@/components/dashboard/agentDashboard/Commission";
 import Customers from "@/components/dashboard/agentDashboard/Customers";
 import Transaction from "@/components/dashboard/agentDashboard/Transactions";
+import UserDeposit from "@/components/dashboard/userDashboard/Deposit";
+import UserWithdraw from "@/components/dashboard/userDashboard/Withdraw";
+import UserProfile from "@/components/share/Profile";
 import type { ISidebarItem } from "@/types/authTypes";
 
 export const agentSidebarItems: ISidebarItem[] = [
@@ -21,11 +25,6 @@ export const agentSidebarItems: ISidebarItem[] = [
         component: CashOperations,
       },
       {
-        title: "Commission",
-        url: "/agent/commission",
-        component: Commission,
-      },
-      {
         title: "Customers",
         url: "/agent/customers",
         component: Customers,
@@ -35,6 +34,31 @@ export const agentSidebarItems: ISidebarItem[] = [
         url: "/agent/transaction",
         component: Transaction,
       },
+      {
+        title: "Deposit",
+        url: "/agent/deposit",
+        component: UserDeposit,
+      },
+      {
+        title: "Withdraw",
+        url: "/agent/withdraw",
+        component: UserWithdraw,
+      },
+      {
+        title: "Commission",
+        url: "/agent/commission",
+        component: Commission,
+      },
+      {
+        title: "Profile",
+        url: "/agent/profile",
+        component: UserProfile,
+      },
+      // {
+      //   title: "Settings",
+      //   url: "/user/settings",
+      //   component: Settings,
+      // },
     ],
   },
 ];

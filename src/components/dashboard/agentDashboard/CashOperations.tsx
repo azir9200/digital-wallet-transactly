@@ -34,7 +34,7 @@ const CashOperations = () => {
   // const [cashIn] = useCashInMutation();
   const { data, isLoading } = useGetAllUserQuery(undefined);
   const customers = data?.data || [];
-  console.log("cash operation", customers);
+  console.log("cashhhkhjkn operation", customers);
 
   const filteredCustomers = customers.filter(
     (customer: Customer) =>

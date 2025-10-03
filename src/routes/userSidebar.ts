@@ -1,18 +1,18 @@
 import PersonalQuestionnaires from "@/components/dashboard/userDashboard/personalQues";
 import type { ISidebarItem } from "@/types/authTypes";
 import Balance from "@/components/dashboard/userDashboard/Balance";
-import RecentTransactions from "@/components/dashboard/userDashboard/RecentTransactions";
 import StatsCards from "@/components/dashboard/userDashboard/StatsCards";
 import Setting from "@/components/dashboard/adminDashboard/Settings";
 import Deposit from "@/components/dashboard/userDashboard/Deposit";
 import SendMoney from "@/components/dashboard/userDashboard/SendMoney";
 import Withdraw from "@/components/dashboard/userDashboard/Withdraw";
-import TransactionHistory from "@/components/dashboard/userDashboard/TransactionHistory";
+
 import QRCodePage from "@/components/dashboard/userDashboard/QRCode";
 import Referral from "@/components/dashboard/userDashboard/Referral";
 import UserDashboard from "@/pages/dashboard/UserDashboard";
 import CashOut from "@/components/dashboard/userDashboard/CashOut";
 import UserProfile from "@/components/share/Profile";
+import TransactionHistory from "@/components/dashboard/userDashboard/TransactionHistory";
 
 export const userSidebarItems: ISidebarItem[] = [
   {
@@ -48,7 +48,7 @@ export const userSidebarItems: ISidebarItem[] = [
         url: "/user/withdraw",
         component: Withdraw,
       },
- {
+      {
         title: "Transaction",
         url: "/user/transactions",
         component: TransactionHistory,
@@ -59,9 +59,6 @@ export const userSidebarItems: ISidebarItem[] = [
         url: "/user/profile",
         component: UserProfile,
       },
-
-
-
 
       // {
       //   title: "Recent Transaction",
@@ -79,7 +76,6 @@ export const userSidebarItems: ISidebarItem[] = [
         url: "/user/balance",
         component: Balance,
       },
-
 
       {
         title: "QRCode",
