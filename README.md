@@ -1,40 +1,40 @@
-# 💳 Digital Wallet Frontend (React + Redux Toolkit + RTK Query)
+# Digital Wallet Frontend
 
 A **secure, role-based, and user-friendly** digital wallet frontend application built with **React.js**, **Redux Toolkit**, and **RTK Query**.  
 Inspired by systems like **bKash** and **Nagad**, this project enables **Users**, **Agents**, and **Admins** to perform financial operations and manage wallets seamlessly.
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔓 Public Landing Section
+###  Public Landing Section
 
 - Responsive **Home Page** with hero banner, navigation, footer, and animations
 - **About, Features, Pricing (optional), Contact, and FAQ pages**
 - Smooth transitions, skeleton loaders, and polished UX
 
-### 🔑 Authentication
+###  Authentication
 
 - JWT-based **Login & Registration**
 - Role selection (**User** / **Agent**)
 - Persisted authentication state
 - Role-based redirection & Logout
 
-### 👤 User Dashboard
+###  User Dashboard
 
 - Wallet overview with balance & recent transactions
 - Deposit, Withdraw, and **Send Money**
 - Transaction history with filters & pagination
 - Profile management (update info & password)
 
-### 🏦 Agent Dashboard
+### Agent Dashboard
 
 - Overview with **cash-in/out summary**
 - Add/Withdraw money for users
 - Transaction & commission history
 - Profile management
 
-### 🛠️ Admin Dashboard
+### Admin Dashboard
 
 - System overview (users, agents, transactions, volume)
 - Manage **Users** (block/unblock) & **Agents** (approve/suspend)
@@ -42,7 +42,7 @@ Inspired by systems like **bKash** and **Nagad**, this project enables **Users**
 - Adjustable system fees/limits (optional)
 - Profile management
 
-### 🌐 General Features
+### General Features
 
 - Role-based navigation
 - Global error handling & validations
@@ -54,7 +54,7 @@ Inspired by systems like **bKash** and **Nagad**, this project enables **Users**
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Frontend:**
 
@@ -71,12 +71,12 @@ Inspired by systems like **bKash** and **Nagad**, this project enables **Users**
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
-### 1️⃣ Clone the repository
+### Clone the repository
 
 ```bash
-git clone https://github.com/your-username/digital-wallet-frontend.git
+git clone https://github.com/azir9200/digital-wallet-transactly
 cd digital-wallet-frontend
 
 Install dependencies
@@ -92,9 +92,9 @@ npm run dev
 
 
 Frontend will run at:
-👉 http://localhost:5173/
+ http://localhost:5173/
 
-📂 Project Structure
+ Project Structure
 src/
  ┣ components/     # Reusable UI components
  ┣ features/       # Redux slices & API services
@@ -105,32 +105,26 @@ src/
  ┣ App.tsx         # App entry with routes
  ┗ main.tsx        # React DOM render
 
-🌍 Deployment
+ Deployment
 
-Frontend: Live URL here
+Vercel Live : https://digital-wallet-transactly.vercel.app/
 
-Backend: API URL here
+Backend: https://github.com/azir9200/digital-wallet
 
 🎥 Demo Video
 
-▶️ Watch Demo
+ Watch https://youtu.be/f0kzNw6EkUI?si=Oxfdx7ZXljDF-zs-
 
 (Shows login/registration, wallet operations, filtering, and role management.)
 
-🔑 Test Credentials
-Admin
-Email: admin@wallet.com
-Password: Admin@123
+ Test Credentials
 
-Agent
-Email: agent@wallet.com
-Password: Agent@123
 
 User
-Email: user@wallet.com
-Password: User@123
+Email: user1@gmail.com
+Password: 123456
 
-🤝 Contributing
+ Contributing
 
 Contributions, issues, and feature requests are welcome!
 Feel free to fork this repo and submit pull requests.
@@ -143,6 +137,6 @@ This project is licensed under the MIT License.
 
 Your Name
 🔗 Portfolio
- | LinkedIn
- | Twitter
+ | LinkedIn: https://www.linkedin.com/in/azir9200
+
 ```
