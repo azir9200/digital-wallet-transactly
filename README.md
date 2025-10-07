@@ -120,9 +120,15 @@ Backend: https://github.com/azir9200/digital-wallet
  Test Credentials
 
 
+Admin: email : admin1@gmail.com
+       password : 123456
+
+Agent  email : agent10@gmail.com
+       password : 123456
+
 User
-Email: user1@gmail.com
-Password: 123456
+       email : agent10@gmail.com
+       password : 123456
 
  Contributing
 
